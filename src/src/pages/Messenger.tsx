@@ -1,4 +1,10 @@
-import React, { FormEvent, useMemo, useRef, useState } from "react";
+import React, {
+  FormEvent,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { AppShell } from "../components/layout/AppShell";
 import { Icon } from "../components/ui/Icon";
 import { Button } from "../components/ui/Button";
@@ -210,6 +216,24 @@ const focusBlocks = [
   },
 ];
 
+const fallbackAvatar =
+  "https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=facearea&w=200&h=200&q=80";
+
+const emojiPalette = [
+  "😀",
+  "😁",
+  "😂",
+  "😊",
+  "😍",
+  "🤔",
+  "😎",
+  "🙌",
+  "🚢",
+  "⚓️",
+  "📡",
+  "🛠️",
+];
+
 type NavTab = "chats" | "ops" | "workspace";
 type PillFilter = "all" | "exec" | "tech" | "team";
 
@@ -226,6 +250,14 @@ export function Messenger() {
   const [rightPanelTab, setRightPanelTab] = useState<
     "media" | "files" | "notes"
   >("media");
+  const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
+  const [activeCall, setActiveCall] = useState<
+    { type: "audio" | "video"; startedAt: number } | null
+  >(null);
+  const [callDuration, setCallDuration] = useState("00:00");
+  const [isMuted, setIsMuted] = useState(false);
+  const [isCameraOff, setIsCameraOff] = useState(false);
+  const [isScreenSharing, setIsScreenSharing] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -238,6 +270,56 @@ export function Messenger() {
     setTimeout(() => {
       setMessageNotice((prev) => (prev === text ? null : prev));
     }, 3500);
+  };
+
+  useEffect(() => {
+    if (!activeCall) return;
+    const interval = setInterval(() => {
+      const elapsed = Math.floor((Date.now() - activeCall.startedAt) / 1000);
+      const minutes = String(Math.floor(elapsed / 60)).padStart(2, "0");
+      const seconds = String(elapsed % 60).padStart(2, "0");
+      setCallDuration(`${minutes}:${seconds}`);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [activeCall]);
+
+  const handleCallStart = (type: "audio" | "video") => {
+    setActiveCall({ type, startedAt: Date.now() });
+    setCallDuration("00:00");
+    setIsMuted(false);
+    setIsCameraOff(false);
+    setIsScreenSharing(false);
+    showNotice(
+      type === "audio"
+        ? "در حال برقراری تماس صوتی ایمن با تیم مربوطه هستید."
+        : "جلسه ویدئویی رمزگذاری‌شده آغاز شد."
+    );
+  };
+
+  const handleEndCall = () => {
+    if (!activeCall) return;
+    showNotice(
+      activeCall.type === "audio"
+        ? "تماس صوتی پایان یافت."
+        : "جلسه ویدئویی خاتمه یافت."
+    );
+    setActiveCall(null);
+    setCallDuration("00:00");
+    setIsMuted(false);
+    setIsCameraOff(false);
+    setIsScreenSharing(false);
+  };
+
+  const handleEmojiSelect = (emoji: string) => {
+    setComposerValue((prev) => `${prev}${emoji}`);
+    setIsEmojiPickerOpen(false);
+  };
+
+  const handleImageError = (
+    event: React.SyntheticEvent<HTMLImageElement, Event>
+  ) => {
+    event.currentTarget.src = fallbackAvatar;
+    event.currentTarget.onerror = null;
   };
 
   // search
@@ -303,6 +385,7 @@ export function Messenger() {
     );
 
     setComposerValue("");
+    setIsEmojiPickerOpen(false);
     showNotice("پیام از طریق مسیر امن داخلی AsiaClass ارسال شد.");
   };
 
@@ -344,12 +427,24 @@ export function Messenger() {
       )
     );
 
+    setIsEmojiPickerOpen(false);
     showNotice("فایل برای تیم مربوطه ارسال و در آرشیو داخلی ثبت شد.");
     event.target.value = "";
   };
 
+  const chatActions: Array<{
+    icon: string;
+    label: string;
+    type?: "audio" | "video";
+  }> = [
+    { icon: "phone", label: "تماس صوتی", type: "audio" },
+    { icon: "video", label: "جلسه ویدئویی", type: "video" },
+    { icon: "bookmark", label: "پین‌کردن کانال" },
+    { icon: "dots", label: "گزینه‌های بیشتر" },
+  ];
+
   return (
-    <AppShell>
+    <AppShell fullWidth>
       {/* Full-page canvas */}
       <div
         className="min-h-[calc(100vh-80px)] bg-slate-50 px-3 lg:px-6 py-4"
@@ -389,9 +484,9 @@ export function Messenger() {
         </div>
 
         {/* main grid – 100% width */}
-        <div className="grid h-[calc(100vh-150px)] grid-cols-12 gap-3 lg:gap-4 xl:gap-5">
+        <div className="grid min-h-[calc(100vh-150px)] w-full grid-cols-12 gap-3 lg:gap-4 xl:gap-5">
           {/* LEFT: brand + nav + focus */}
-          <section className="col-span-12 flex flex-col overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-sm lg:col-span-3 xl:col-span-2">
+          <section className="col-span-12 flex min-h-0 min-w-0 flex-col overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-sm lg:col-span-3 xl:col-span-2">
             <div className="border-b border-slate-100 p-4 pb-5">
               <div className="rounded-2xl bg-gradient-to-br from-slate-900 via-slate-800 to-sky-900 p-4 text-white">
                 <div className="flex items-center gap-3">
@@ -399,6 +494,9 @@ export function Messenger() {
                     src="https://images.unsplash.com/photo-1544723795-3fb6469f5b39?auto=format&fit=facearea&w=120&h=120&q=80"
                     alt="ASC Ops Lead"
                     className="h-10 w-10 rounded-2xl border border-white/30 object-cover"
+                    loading="lazy"
+                    referrerPolicy="no-referrer"
+                    onError={handleImageError}
                   />
                   <div>
                     <p className="text-[11px] text-white/70">
@@ -482,7 +580,7 @@ export function Messenger() {
           </section>
 
           {/* MIDDLE LEFT: thread list */}
-          <section className="col-span-12 flex flex-col overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-sm md:col-span-4 xl:col-span-3">
+          <section className="col-span-12 flex min-h-0 min-w-0 flex-col overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-sm md:col-span-4 xl:col-span-3">
             <div className="border-b border-slate-100 p-4 pb-3">
               <div className="flex items-center gap-3">
                 <div className="relative flex-1">
@@ -560,6 +658,9 @@ export function Messenger() {
                           src={thread.avatar}
                           alt={thread.name}
                           className="h-11 w-11 rounded-2xl object-cover"
+                          loading="lazy"
+                          referrerPolicy="no-referrer"
+                          onError={handleImageError}
                         />
                         <span
                           className={cn(
@@ -604,7 +705,7 @@ export function Messenger() {
           </section>
 
           {/* MIDDLE: main chat */}
-          <section className="col-span-12 flex flex-col overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-md md:col-span-5 xl:col-span-5">
+          <section className="col-span-12 flex min-h-0 min-w-0 flex-col overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-md md:col-span-5 xl:col-span-5">
             {/* chat header */}
             <div className="flex items-center justify-between gap-4 border-b border-slate-100 px-5 py-4">
               <div className="flex items-center gap-3">
@@ -612,6 +713,9 @@ export function Messenger() {
                   src={selectedChat?.avatar}
                   alt={selectedChat?.name}
                   className="h-12 w-12 rounded-2xl object-cover"
+                  loading="lazy"
+                  referrerPolicy="no-referrer"
+                  onError={handleImageError}
                 />
                 <div>
                   <div className="flex items-center gap-2 text-sm font-semibold text-slate-900">
@@ -627,22 +731,37 @@ export function Messenger() {
                 </div>
               </div>
               <div className="flex items-center gap-1.5">
-                {[
-                  { icon: "phone", label: "تماس صوتی" },
-                  { icon: "video", label: "جلسه ویدئویی" },
-                  { icon: "bookmark", label: "پین‌کردن کانال" },
-                  { icon: "dots", label: "گزینه‌های بیشتر" },
-                ].map((btn) => (
-                  <button
-                    key={btn.icon}
-                    className="flex h-9 w-9 items-center justify-center rounded-2xl border border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:text-slate-900"
-                    onClick={() =>
-                      showNotice(`${btn.label} به‌زودی فعال می‌شود.`)
-                    }
-                  >
-                    <Icon name={btn.icon as any} size={17} />
-                  </button>
-                ))}
+                {chatActions.map((btn) => {
+                  const isActive = Boolean(
+                    btn.type && activeCall?.type === btn.type
+                  );
+                  return (
+                    <button
+                      key={btn.icon}
+                      type="button"
+                      aria-label={btn.label}
+                      aria-pressed={isActive}
+                      className={cn(
+                        "flex h-9 w-9 items-center justify-center rounded-2xl border border-slate-200 bg-white text-slate-600 transition",
+                        isActive &&
+                          "border-slate-900 bg-slate-100 text-slate-900"
+                      )}
+                      onClick={() => {
+                        if (btn.type) {
+                          if (isActive) {
+                            handleEndCall();
+                          } else {
+                            handleCallStart(btn.type);
+                          }
+                        } else {
+                          showNotice(`${btn.label} به‌زودی فعال می‌شود.`);
+                        }
+                      }}
+                    >
+                      <Icon name={btn.icon as any} size={17} />
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
@@ -658,6 +777,86 @@ export function Messenger() {
               </span>
               {selectedChat?.typing && <span>در حال نوشتن…</span>}
             </div>
+
+            {activeCall && (
+              <div className="border-b border-slate-100 bg-slate-50/80 px-5 py-3 text-xs text-slate-600">
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <div>
+                    <p className="text-[11px] font-semibold text-slate-900">
+                      {activeCall.type === "audio"
+                        ? "تماس صوتی ایمن فعال است"
+                        : "جلسه ویدئویی ایمن فعال است"}
+                    </p>
+                    <p className="text-[10px] text-slate-500">
+                      {isMuted ? "میکروفن بی‌صداست" : "میکروفن فعال است"}
+                      {activeCall.type === "video" && (
+                        <>
+                          {" · "}
+                          {isCameraOff
+                            ? "دوربین خاموش است"
+                            : "دوربین روشن است"}
+                        </>
+                      )}
+                      {isScreenSharing && " · اشتراک‌گذاری صفحه فعال"}
+                    </p>
+                  </div>
+                  <span className="rounded-full bg-white px-3 py-1 text-[11px] font-semibold text-slate-900">
+                    {callDuration}
+                  </span>
+                </div>
+                <div className="mt-3 flex flex-wrap items-center gap-2 text-[11px]">
+                  <button
+                    type="button"
+                    className={cn(
+                      "flex items-center gap-1 rounded-2xl border px-3 py-1.5",
+                      isMuted
+                        ? "border-amber-400 bg-amber-50 text-amber-700"
+                        : "border-slate-200 bg-white text-slate-700"
+                    )}
+                    onClick={() => setIsMuted((prev) => !prev)}
+                  >
+                    <Icon name={isMuted ? "micOff" : "mic"} size={15} />
+                    {isMuted ? "فعال‌سازی صدا" : "بی‌صدا کردن"}
+                  </button>
+                  {activeCall.type === "video" && (
+                    <button
+                      type="button"
+                      className={cn(
+                        "flex items-center gap-1 rounded-2xl border px-3 py-1.5",
+                        isCameraOff
+                          ? "border-amber-400 bg-amber-50 text-amber-700"
+                          : "border-slate-200 bg-white text-slate-700"
+                      )}
+                      onClick={() => setIsCameraOff((prev) => !prev)}
+                    >
+                      <Icon name={isCameraOff ? "videoOff" : "video"} size={15} />
+                      {isCameraOff ? "روشن کردن دوربین" : "خاموش کردن دوربین"}
+                    </button>
+                  )}
+                  <button
+                    type="button"
+                    className={cn(
+                      "flex items-center gap-1 rounded-2xl border px-3 py-1.5",
+                      isScreenSharing
+                        ? "border-sky-400 bg-sky-50 text-sky-700"
+                        : "border-slate-200 bg-white text-slate-700"
+                    )}
+                    onClick={() => setIsScreenSharing((prev) => !prev)}
+                  >
+                    <Icon name="share" size={15} />
+                    {isScreenSharing ? "پایان اشتراک‌گذاری" : "اشتراک‌گذاری صفحه"}
+                  </button>
+                  <button
+                    type="button"
+                    className="flex items-center gap-1 rounded-2xl bg-rose-600 px-3 py-1.5 text-white"
+                    onClick={handleEndCall}
+                  >
+                    <Icon name="phone" size={15} />
+                    پایان تماس
+                  </button>
+                </div>
+              </div>
+            )}
 
             {/* messages */}
             <div className="flex-1 space-y-4 overflow-y-auto px-5 py-4">
@@ -715,6 +914,9 @@ export function Messenger() {
                                   src={attachment.preview}
                                   alt={attachment.label}
                                   className="h-44 w-full object-cover"
+                                  loading="lazy"
+                                  referrerPolicy="no-referrer"
+                                  onError={handleImageError}
                                 />
                               ) : (
                                 <div className="flex items-center gap-3 px-4 py-3">
@@ -758,7 +960,7 @@ export function Messenger() {
               onSubmit={handleComposerSubmit}
               className="space-y-1.5 border-t border-slate-100 px-5 py-3"
             >
-              <div className="flex items-center gap-3 rounded-3xl border border-slate-200 bg-slate-50 px-4 py-2.5">
+              <div className="relative flex items-center gap-3 rounded-3xl border border-slate-200 bg-slate-50 px-4 py-2.5">
                 <button
                   type="button"
                   className="text-slate-500 hover:text-slate-700"
@@ -784,13 +986,29 @@ export function Messenger() {
                 />
                 <button
                   type="button"
-                  className="text-slate-500 hover:text-slate-700"
-                  onClick={() =>
-                    showNotice("ایموجی‌پیکر در نسخه بعدی اضافه می‌شود.")
-                  }
+                  className={cn(
+                    "text-slate-500 transition hover:text-slate-700",
+                    isEmojiPickerOpen && "text-slate-900"
+                  )}
+                  aria-expanded={isEmojiPickerOpen}
+                  onClick={() => setIsEmojiPickerOpen((prev) => !prev)}
                 >
                   <Icon name="smile" size={18} />
                 </button>
+                {isEmojiPickerOpen && (
+                  <div className="absolute bottom-14 left-3 z-20 grid w-48 grid-cols-6 gap-1 rounded-2xl border border-slate-200 bg-white p-2 shadow-xl">
+                    {emojiPalette.map((emoji) => (
+                      <button
+                        key={emoji}
+                        type="button"
+                        className="text-base"
+                        onClick={() => handleEmojiSelect(emoji)}
+                      >
+                        {emoji}
+                      </button>
+                    ))}
+                  </div>
+                )}
                 <button
                   type="submit"
                   className="flex items-center gap-1.5 rounded-2xl bg-slate-900 px-4 py-1.5 text-xs font-semibold text-white hover:bg-slate-800"
@@ -808,7 +1026,7 @@ export function Messenger() {
           </section>
 
           {/* RIGHT: info / media / files */}
-          <section className="col-span-12 flex flex-col overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-sm md:col-span-3 xl:col-span-2">
+          <section className="col-span-12 flex min-h-0 min-w-0 flex-col overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-sm md:col-span-3 xl:col-span-2">
             <div className="border-b border-slate-100 px-4 py-3">
               <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500">
                 پروفایل کانال
@@ -847,9 +1065,7 @@ export function Messenger() {
                   variant="secondary"
                   size="sm"
                   className="rounded-2xl border-slate-200 bg-slate-50 text-[11px] text-slate-700"
-                  onClick={() =>
-                    showNotice("در حال شماره‌گیری داخلی واحد مربوطه… (دمو)")
-                  }
+                  onClick={() => handleCallStart("audio")}
                 >
                   <Icon name="phone" size={14} />
                   تماس
@@ -858,7 +1074,7 @@ export function Messenger() {
                   variant="secondary"
                   size="sm"
                   className="rounded-2xl border-slate-200 bg-slate-50 text-[11px] text-slate-700"
-                  onClick={() => showNotice("در حال تنظیم جلسه آنلاین (دمو)…")}
+                  onClick={() => handleCallStart("video")}
                 >
                   <Icon name="video" size={14} />
                   جلسه
@@ -939,6 +1155,9 @@ export function Messenger() {
                           src={media.preview}
                           alt={media.title}
                           className="h-20 w-full object-cover"
+                          loading="lazy"
+                          referrerPolicy="no-referrer"
+                          onError={handleImageError}
                         />
                         <div className="px-2.5 py-2">
                           <p className="line-clamp-2 text-[11px] font-semibold text-slate-900">

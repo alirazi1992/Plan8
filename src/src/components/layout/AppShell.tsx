@@ -1,9 +1,14 @@
 // src/components/layout/AppShell.tsx
 import React, { useState, FormEvent } from "react";
 import { Topbar } from "./Topbar";
+import { cn } from "../../lib/utils/cn";
 
 export interface AppShellProps {
   children: React.ReactNode;
+  /**
+   * برای صفحاتی مثل پیام‌رسان که باید تمام عرض صفحه را اشغال کنند
+   */
+  fullWidth?: boolean;
 }
 
 interface NotificationItem {
@@ -14,7 +19,7 @@ interface NotificationItem {
   read: boolean;
 }
 
-export function AppShell({ children }: AppShellProps) {
+export function AppShell({ children, fullWidth = false }: AppShellProps) {
   // 🔍 جست‌وجو
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -161,8 +166,15 @@ export function AppShell({ children }: AppShellProps) {
       )}
 
       {/* محتوای اصلی صفحات داشبورد */}
-      <main className="px-6 py-8 lg:px-10">
-        <div className="max-w-7xl mx-auto">{children}</div>
+      <main className={cn("px-6 py-8 lg:px-10", fullWidth && "lg:px-8")}>
+        <div
+          className={cn(
+            "w-full",
+            fullWidth ? "mx-auto" : "max-w-7xl mx-auto"
+          )}
+        >
+          {children}
+        </div>
       </main>
     </div>
   );
