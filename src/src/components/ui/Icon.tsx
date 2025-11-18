@@ -113,6 +113,11 @@ export function Icon({
         <path d="M23 7l-7 5 7 5V7z" />
         <rect x="1" y="5" width="15" height="14" rx="2" ry="2" />
       </svg>,
+    videoOff: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M16 16H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h2" />
+        <path d="m22 15-5-4 5-4z" />
+        <line x1="1" y1="1" x2="23" y2="23" />
+      </svg>,
     bookmark: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
       </svg>,
@@ -129,6 +134,20 @@ export function Icon({
         <path d="M8 15s1.5 2 4 2 4-2 4-2" />
         <line x1="9" y1="9" x2="9" y2="9" />
         <line x1="15" y1="9" x2="15" y2="9" />
+      </svg>,
+    mic: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 1a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
+        <path d="M19 10a7 7 0 0 1-14 0" />
+        <line x1="12" y1="19" x2="12" y2="23" />
+        <line x1="8" y1="23" x2="16" y2="23" />
+      </svg>,
+    micOff: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M15 9v3a3 3 0 0 1-5.12 2.12" />
+        <path d="M9 5v4m0 4v2" />
+        <path d="M17 10a5 5 0 0 1-2 3.87" />
+        <path d="M12 19v4" />
+        <path d="M8 23h8" />
+        <line x1="1" y1="1" x2="23" y2="23" />
       </svg>,
     send: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <line x1="22" y1="2" x2="11" y2="13" />
