@@ -440,6 +440,128 @@ const collabQuickLinks: CollabQuickLink[] = [
   },
 ];
 
+type ProjectWorkspaceFeature = {
+  id: string;
+  label: string;
+  helper: string;
+  count?: number;
+};
+
+type ProjectBlueprintCallout = {
+  id: string;
+  label: string;
+  detail: string;
+};
+
+type ProjectWorkspaceProject = {
+  id: string;
+  utn: string;
+  title: string;
+  owner: string;
+  vessel: string;
+  location: string;
+  port: string;
+  focus: string;
+  due: string;
+  progress: number;
+  capa: string;
+  risk: string;
+  features: ProjectWorkspaceFeature[];
+  callouts: ProjectBlueprintCallout[];
+};
+
+const projectWorkspaceProjects: ProjectWorkspaceProject[] = [
+  {
+    id: "utn-2045-workbench",
+    utn: "UTN-2045",
+    title: "بدنه کشتی آذرین · نسخه ۳ نقشه",
+    owner: "ندا شریفی",
+    vessel: "Azarin Class",
+    location: "اسکله شهید بهشتی، چابهار",
+    port: "چابهار",
+    focus: "بازرسی بدنه + هم‌ترازی سازه",
+    due: "امروز · ۱۷:۳۰",
+    progress: 68,
+    capa: "CAPA-311 در حال اقدام",
+    risk: "ریسک لرزش ۲.۱g",
+    features: [
+      { id: "overview", label: "نمای کلی", helper: "طرح + وضعیت لحظه‌ای" },
+      { id: "docs", label: "مدارک", helper: "DWG + PDF مهر شده", count: 4 },
+      { id: "inspections", label: "بازرسی‌ها", helper: "Field + Lab", count: 1 },
+      { id: "certificates", label: "گواهینامه‌ها", helper: "آماده‌سازی", count: 0 },
+      { id: "stamps", label: "مهرها", helper: "AsiaClass Digital", count: 0 },
+      { id: "capa", label: "CAPA", helper: "اقدام اصلاحی", count: 1 },
+    ],
+    callouts: [
+      { id: "bulkhead", label: "عرشه A3", detail: "انحراف ۱.۴ میلی‌متر" },
+      { id: "keel", label: "کیـل مرکزی", detail: "نیازمند تقویت جوش" },
+      { id: "sensor", label: "سنسور لرزش", detail: "کالیبراسیون تا ۱۸:۰۰" },
+      { id: "docs", label: "DWG", detail: "نسخه ۳ · ۴ پیوست" },
+    ],
+  },
+  {
+    id: "utn-1980-workbench",
+    utn: "UTN-1980",
+    title: "تحلیل نشتی سیستم روغن",
+    owner: "محمد رضوی",
+    vessel: "Negin Service Vessel",
+    location: "اتاق ماشین‌آلات · اسکله کیش",
+    port: "کیش",
+    focus: "بازرسی میدانی + تحلیل آزمایشگاه",
+    due: "فردا · ۰۹:۴۵",
+    progress: 54,
+    capa: "CAPA-118 تایید شده",
+    risk: "ریسک آلودگی ۱.۸٪",
+    features: [
+      { id: "overview", label: "نمای کلی", helper: "روند فشار + دما" },
+      { id: "docs", label: "مدارک", helper: "گزارش تست آزمایشگاه", count: 6 },
+      { id: "inspections", label: "بازرسی‌ها", helper: "UT/MT", count: 2 },
+      { id: "certificates", label: "گواهینامه‌ها", helper: "در انتظار QA", count: 1 },
+      { id: "stamps", label: "مهرها", helper: "AsiaClass", count: 1 },
+      { id: "capa", label: "CAPA", helper: "۲ اقدام اصلاحی", count: 2 },
+    ],
+    callouts: [
+      { id: "valve", label: "شیر تغذیه", detail: "ΔP = ۰.۷ بار" },
+      { id: "pump", label: "پمپ A2", detail: "نیازمند آب‌بندی" },
+      { id: "lab", label: "نمونه آزمایش", detail: "ارسال به تهران" },
+      { id: "doc", label: "CAPA", detail: "دو گام باز" },
+    ],
+  },
+  {
+    id: "utn-2101-workbench",
+    utn: "UTN-2101",
+    title: "شبکه الکتریک و اتوماسیون",
+    owner: "مهدی سلیمانی",
+    vessel: "Pars Offshore",
+    location: "کارگاه مرکزی · اتاق کنترل",
+    port: "بندرعباس",
+    focus: "نقشه‌برداری کابل + تایید نرم‌افزار",
+    due: "فردا · ۱۵:۲۰",
+    progress: 81,
+    capa: "CAPA-412 بسته شد",
+    risk: "ریسک تاخیر نرم‌افزاری",
+    features: [
+      { id: "overview", label: "نمای کلی", helper: "کابل‌کشی + نرم‌افزار" },
+      { id: "docs", label: "مدارک", helper: "بسته دیجیتال", count: 5 },
+      { id: "inspections", label: "بازرسی‌ها", helper: "QA مشترک", count: 1 },
+      { id: "certificates", label: "گواهینامه‌ها", helper: "ارسال به Asiaclass", count: 1 },
+      { id: "stamps", label: "مهرها", helper: "دیجیتال", count: 2 },
+      { id: "capa", label: "CAPA", helper: "در انتظار تایید", count: 0 },
+    ],
+    callouts: [
+      { id: "panel", label: "تابلو 1C", detail: "Firmware v5.4" },
+      { id: "cable", label: "کابل مسیر C", detail: "۷۵٪ نصب" },
+      { id: "test", label: "تست عایقی", detail: "نتیجه > ۹۸٪" },
+      { id: "stamp", label: "مهر دیجیتال", detail: "۲ نسخه" },
+    ],
+  },
+];
+
+type ProjectApprovalState = {
+  stampRequested: boolean;
+  signatureRequested: boolean;
+};
+
 type ReportRangeKey = "week" | "month" | "quarter";
 type ReportStageFilter = "all" | "draft" | "ready" | "shared";
 type ReportStage =
@@ -989,6 +1111,28 @@ function TechnicianDashboardView() {
   const [quickNotes, setQuickNotes] = useState<QuickNote[]>([]);
   const [noteModalOpen, setNoteModalOpen] = useState(false);
   const [noteDraft, setNoteDraft] = useState("");
+
+  const [selectedProjectId, setSelectedProjectId] = useState<string>(
+    projectWorkspaceProjects[0]?.id ?? ""
+  );
+  const [projectApprovals, setProjectApprovals] = useState<
+    Record<string, ProjectApprovalState>
+  >(() =>
+    projectWorkspaceProjects.reduce(
+      (acc, project) => {
+        const stampCount =
+          project.features.find((feature) => feature.id === "stamps")?.
+            count ?? 0;
+        acc[project.id] = {
+          stampRequested: stampCount > 0,
+          signatureRequested: false,
+        };
+        return acc;
+      },
+      {} as Record<string, ProjectApprovalState>
+    )
+  );
+  const [projectActionMessage, setProjectActionMessage] = useState("");
 
   const [actionModalOpen, setActionModalOpen] = useState(false);
   const [actionTitle, setActionTitle] = useState("");
@@ -1569,6 +1713,21 @@ function TechnicianDashboardView() {
     []
   );
 
+  const selectedProject = useMemo(
+    () =>
+      projectWorkspaceProjects.find(
+        (project) => project.id === selectedProjectId
+      ) ?? projectWorkspaceProjects[0] ?? null,
+    [selectedProjectId]
+  );
+
+  const selectedProjectApprovals = selectedProject
+    ? projectApprovals[selectedProject.id] ?? {
+        stampRequested: false,
+        signatureRequested: false,
+      }
+    : { stampRequested: false, signatureRequested: false };
+
   useEffect(() => {
     if (filteredBoardItems.length === 0) {
       setSelectedBoardId(null);
@@ -1800,6 +1959,35 @@ function TechnicianDashboardView() {
 
   const handleCloseSupportModal = () => {
     setActiveSupportId(null);
+  };
+
+  const handleProjectAction = (
+    projectId: string,
+    action: "stamp" | "signature"
+  ) => {
+    setProjectApprovals((prev) => {
+      const current = prev[projectId] ?? {
+        stampRequested: false,
+        signatureRequested: false,
+      };
+      const updated = {
+        ...current,
+        ...(action === "stamp"
+          ? { stampRequested: true }
+          : { signatureRequested: true }),
+      };
+      return { ...prev, [projectId]: updated };
+    });
+
+    const project = projectWorkspaceProjects.find(
+      (item) => item.id === projectId
+    );
+    const projectLabel = project?.utn ?? "پروژه";
+    setProjectActionMessage(
+      action === "stamp"
+        ? `مهر دیجیتال آسیاکلاس برای ${projectLabel} فعال شد.`
+        : `امضای الکترونیکی ${projectLabel} ثبت شد.`
+    );
   };
 
   return (
@@ -2991,6 +3179,253 @@ function TechnicianDashboardView() {
             </div>
           </Card>
         </section>
+
+        {selectedProject ? (
+          <section className="grid gap-6 xl:grid-cols-[1.1fr,0.9fr]">
+            <GlassCard className="p-6 space-y-5 bg-white/95 border border-gray-100 shadow-sm">
+              <div className="flex flex-row-reverse items-start justify-between gap-4">
+                <div className="text-right space-y-1">
+                  <p className="text-xs text-gray-500">
+                    اتاق پروژه آسیاصنعت کلاس · اتصال مستقیم با پلتفرم AsiaClass
+                  </p>
+                  <h3 className="text-lg font-semibold text-gray-900">
+                    فضای کاری نقشه + مدارک دیجیتال
+                  </h3>
+                  <p className="text-xs text-gray-500">{selectedProject.focus}</p>
+                </div>
+                <a
+                  href="https://asiaclass.org/en/"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-[11px] text-blue-700"
+                >
+                  AsiaClass.org
+                  <Icon name="arrowUpRight" size={12} />
+                </a>
+              </div>
+
+              <div className="grid gap-4 lg:grid-cols-[1.1fr,0.9fr] items-start">
+                <div className="relative rounded-[28px] border border-gray-200 bg-slate-900 text-white p-5 overflow-hidden">
+                  <div
+                    className="absolute inset-0 opacity-30"
+                    style={{
+                      backgroundImage:
+                        "linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px)",
+                      backgroundSize: "24px 24px",
+                    }}
+                  />
+                  <div className="relative space-y-4">
+                    <div className="flex flex-row-reverse items-center justify-between text-xs text-white/70">
+                      <span className="px-2 py-0.5 rounded-full border border-white/30">
+                        {selectedProject.utn}
+                      </span>
+                      <span>{selectedProject.port}</span>
+                    </div>
+                    <div className="rounded-2xl border border-white/20 bg-white/5 p-4 min-h-[160px] flex flex-col items-center justify-center text-center space-y-2">
+                      <p className="text-sm font-semibold text-white">
+                        {selectedProject.vessel}
+                      </p>
+                      <p className="text-xs text-white/70">{selectedProject.focus}</p>
+                      <div className="flex flex-row-reverse gap-2 text-[10px] text-white/80">
+                        <span className="px-2 py-0.5 rounded-full border border-white/30">
+                          {selectedProject.risk}
+                        </span>
+                        <span className="px-2 py-0.5 rounded-full border border-white/30">
+                          {selectedProject.capa}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2 text-right">
+                      {selectedProject.callouts.map((callout) => (
+                        <div
+                          key={callout.id}
+                          className="rounded-2xl border border-white/15 bg-white/5 px-3 py-2"
+                        >
+                          <p className="text-[10px] text-white/60">{callout.label}</p>
+                          <p className="text-sm font-semibold">{callout.detail}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-4 text-right">
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="rounded-2xl border border-gray-100 bg-white px-3 py-2">
+                      <p className="text-[11px] text-gray-500">مسئول پرونده</p>
+                      <p className="text-sm font-semibold text-gray-900">
+                        {selectedProject.owner}
+                      </p>
+                    </div>
+                    <div className="rounded-2xl border border-gray-100 bg-white px-3 py-2">
+                      <p className="text-[11px] text-gray-500">موعد</p>
+                      <p className="text-sm font-semibold text-gray-900">
+                        {selectedProject.due}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div className="flex flex-row-reverse items-center justify-between text-[11px] text-gray-500">
+                      <span>پیشرفت پرونده</span>
+                      <span className="font-semibold text-gray-900">
+                        {selectedProject.progress}٪
+                      </span>
+                    </div>
+                    <div className="mt-1 h-1.5 rounded-full bg-gray-100 overflow-hidden">
+                      <div
+                        className="h-full rounded-full bg-blue-500"
+                        style={{ width: `${selectedProject.progress}%` }}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid gap-2 sm:grid-cols-3">
+                    {selectedProject.features.map((feature) => (
+                      <div
+                        key={`${selectedProject.id}-${feature.id}`}
+                        className="rounded-2xl border border-dashed border-gray-200 bg-gray-50 px-3 py-2"
+                      >
+                        <div className="flex flex-row-reverse items-center justify-between text-[11px] text-gray-500">
+                          <span>{feature.label}</span>
+                          {typeof feature.count === "number" && (
+                            <span className="font-mono text-sm text-gray-900">
+                              {feature.count}
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-[10px] text-gray-400 mt-1">
+                          {feature.helper}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="flex flex-row-reverse flex-wrap gap-2 text-[11px]">
+                    <span
+                      className={`px-3 py-1 rounded-full border ${
+                        selectedProjectApprovals.stampRequested
+                          ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+                          : "border-gray-200 bg-white text-gray-600"
+                      }`}
+                    >
+                      مهر آسیاصنعت کلاس
+                    </span>
+                    <span
+                      className={`px-3 py-1 rounded-full border ${
+                        selectedProjectApprovals.signatureRequested
+                          ? "border-blue-200 bg-blue-50 text-blue-700"
+                          : "border-gray-200 bg-white text-gray-600"
+                      }`}
+                    >
+                      امضای الکترونیکی
+                    </span>
+                  </div>
+
+                  <div className="flex flex-row-reverse gap-2 flex-wrap">
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      onClick={() => handleProjectAction(selectedProject.id, "stamp")}
+                    >
+                      ثبت مهر دیجیتال آسیاکلاس
+                    </Button>
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      onClick={() => handleProjectAction(selectedProject.id, "signature")}
+                    >
+                      افزودن امضای فنی
+                    </Button>
+                  </div>
+                  {projectActionMessage && (
+                    <p className="text-[11px] text-emerald-600">
+                      {projectActionMessage}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </GlassCard>
+
+            <Card className="p-5 space-y-4 bg-white/95 border border-gray-100">
+              <div className="flex flex-row-reverse items-start justify-between gap-3">
+                <div className="text-right">
+                  <h4 className="text-base font-semibold text-gray-900">
+                    پروژه‌های فعال تکنسین
+                  </h4>
+                  <p className="text-xs text-gray-500 mt-1">
+                    هر پروژه شامل نمای کلی، مدارک، بازرسی‌ها، گواهینامه‌ها، مهرها و CAPA است.
+                  </p>
+                </div>
+                <span className="text-[11px] text-gray-400">مهر + امضای دیجیتال</span>
+              </div>
+
+              <div className="space-y-3">
+                {projectWorkspaceProjects.map((project) => {
+                  const approvals =
+                    projectApprovals[project.id] ?? {
+                      stampRequested: false,
+                      signatureRequested: false,
+                    };
+                  const isActive = selectedProject.id === project.id;
+                  return (
+                    <button
+                      key={project.id}
+                      type="button"
+                      onClick={() => setSelectedProjectId(project.id)}
+                      className={`w-full text-right rounded-2xl border px-4 py-3 transition focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                        isActive
+                          ? "border-blue-400 bg-blue-50/60 shadow-sm"
+                          : "border-gray-100 bg-white hover:border-blue-200"
+                      }`}
+                    >
+                      <div className="flex flex-row-reverse items-start justify-between gap-3">
+                        <div>
+                          <p className="text-sm font-semibold text-gray-900">
+                            {project.title}
+                          </p>
+                          <p className="text-[11px] text-gray-500">
+                            {project.location}
+                          </p>
+                        </div>
+                        <span className="text-[11px] font-mono px-2 py-0.5 rounded-full bg-gray-900 text-white">
+                          {project.utn}
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-3 gap-2 mt-3 text-[11px]">
+                        {project.features.map((feature) => (
+                          <div
+                            key={`${project.id}-${feature.id}`}
+                            className="rounded-xl border border-dashed border-gray-200 bg-gray-50/80 px-2 py-1 flex flex-col items-end"
+                          >
+                            <span className="text-gray-500">{feature.label}</span>
+                            <span className="text-sm font-semibold text-gray-900">
+                              {typeof feature.count === "number"
+                                ? feature.count
+                                : "زنده"}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                      <div className="flex flex-row-reverse items-center justify-between text-[11px] text-gray-500 mt-3">
+                        <span>{project.due}</span>
+                        <span className="flex items-center gap-1">
+                          <span className={approvals.stampRequested ? "text-emerald-600" : "text-gray-500"}>
+                            {approvals.stampRequested ? "مهر فعال" : "در انتظار مهر"}
+                          </span>
+                          <span className="text-gray-300">·</span>
+                          <span className={approvals.signatureRequested ? "text-blue-600" : "text-gray-500"}>
+                            {approvals.signatureRequested ? "امضا شد" : "بدون امضا"}
+                          </span>
+                        </span>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </Card>
+          </section>
+        ) : null}
 
         {/* منابع و پشتیبانی */}
         <section className="grid gap-6 lg:grid-cols-3">
