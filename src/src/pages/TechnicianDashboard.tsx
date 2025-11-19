@@ -2751,6 +2751,23 @@ function TechnicianDashboardView() {
         ] ?? {}
       : {};
 
+  const selectedFeatureChecklistMeta = useMemo(() => {
+    if (!selectedProjectFeatureDetail) {
+      return { total: 0, completed: 0, percent: 0 };
+    }
+    const total = selectedProjectFeatureDetail.checklist.length;
+    if (total === 0) {
+      return { total: 0, completed: 0, percent: 0 };
+    }
+    const completed = selectedProjectFeatureDetail.checklist.reduce(
+      (count, item) =>
+        count + (selectedFeatureChecklistState[item.id] ? 1 : 0),
+      0
+    );
+    const percent = Math.round((completed / total) * 100);
+    return { total, completed, percent };
+  }, [selectedProjectFeatureDetail, selectedFeatureChecklistState]);
+
   useEffect(() => {
     if (filteredBoardItems.length === 0) {
       setSelectedBoardId(null);
@@ -4411,6 +4428,26 @@ function TechnicianDashboardView() {
                         <p className="text-sm text-gray-700">
                           {selectedProjectFeatureDetail.summary}
                         </p>
+                        {selectedFeatureChecklistMeta.total > 0 && (
+                          <div className="space-y-1">
+                            <div className="flex flex-row-reverse items-center justify-between text-[11px] text-gray-500">
+                              <span>پیشرفت چک‌لیست</span>
+                              <span className="font-semibold text-gray-900">
+                                {selectedFeatureChecklistMeta.completed}/
+                                {selectedFeatureChecklistMeta.total} ·
+                                {selectedFeatureChecklistMeta.percent}%
+                              </span>
+                            </div>
+                            <div className="h-1.5 rounded-full bg-gray-100 overflow-hidden">
+                              <div
+                                className="h-full rounded-full bg-emerald-500 transition-all"
+                                style={{
+                                  width: `${selectedFeatureChecklistMeta.percent}%`,
+                                }}
+                              />
+                            </div>
+                          </div>
+                        )}
                         <div className="grid gap-2 sm:grid-cols-3">
                           {selectedProjectFeatureDetail.highlights.map(
                             (highlight) => {
@@ -4583,6 +4620,22 @@ function TechnicianDashboardView() {
                     };
                   const isActive = selectedProject.id === project.id;
                   const activeFeatureId = activeFeatureByProject[project.id];
+                  const activeFeatureDetail =
+                    (activeFeatureId
+                      ? projectFeatureDetails[project.id]?.[activeFeatureId]
+                      : undefined) ?? null;
+                  const activeChecklist = activeFeatureDetail?.checklist ?? [];
+                  const checklistState = activeFeatureId
+                    ? featureChecklistState[project.id]?.[activeFeatureId]
+                    : undefined;
+                  const activeChecklistDone = activeChecklist.reduce(
+                    (count, item) =>
+                      count + (checklistState?.[item.id] ? 1 : 0),
+                    0
+                  );
+                  const activeChecklistPercent = activeChecklist.length
+                    ? Math.round((activeChecklistDone / activeChecklist.length) * 100)
+                    : null;
                   return (
                     <button
                       key={project.id}
@@ -4626,6 +4679,31 @@ function TechnicianDashboardView() {
                           </div>
                         ))}
                       </div>
+                      {activeFeatureDetail && activeChecklist.length > 0 && (
+                        <div className="mt-3 space-y-1 text-[11px] text-gray-500">
+                          <div className="flex flex-row-reverse items-center justify-between">
+                            <span>
+                              چک‌لیست {activeFeatureDetail.summary.replace(/\.$/, "")}
+                            </span>
+                            <span className="font-semibold text-gray-900">
+                              {activeChecklistDone}/{activeChecklist.length}
+                              {typeof activeChecklistPercent === "number"
+                                ? ` · ${activeChecklistPercent}%`
+                                : ""}
+                            </span>
+                          </div>
+                          <div className="h-1.5 rounded-full bg-gray-100 overflow-hidden">
+                            <div
+                              className={`h-full rounded-full ${
+                                isActive ? "bg-blue-500" : "bg-emerald-500/70"
+                              }`}
+                              style={{
+                                width: `${activeChecklistPercent ?? 0}%`,
+                              }}
+                            />
+                          </div>
+                        </div>
+                      )}
                       <div className="flex flex-row-reverse items-center justify-between text-[11px] text-gray-500 mt-3">
                         <span>{project.due}</span>
                         <span className="flex items-center gap-1">
