@@ -470,6 +470,42 @@ type ProjectWorkspaceProject = {
   callouts: ProjectBlueprintCallout[];
 };
 
+type ProjectFeatureHighlight = {
+  id: string;
+  label: string;
+  value: string;
+  tone?: "default" | "positive" | "warning";
+  helper?: string;
+};
+
+type ProjectFeatureChecklistItem = {
+  id: string;
+  label: string;
+  done: boolean;
+  note?: string;
+};
+
+type ProjectFeatureAction = {
+  id: string;
+  label: string;
+  helper?: string;
+  intent?: "primary" | "secondary" | "ghost";
+};
+
+type ProjectFeatureDetail = {
+  summary: string;
+  highlights: ProjectFeatureHighlight[];
+  checklist: ProjectFeatureChecklistItem[];
+  actions: ProjectFeatureAction[];
+};
+
+type ProjectFeatureDetails = Record<string, Record<string, ProjectFeatureDetail>>;
+
+type FeatureChecklistState = Record<
+  string,
+  Record<string, Record<string, boolean>>
+>;
+
 const projectWorkspaceProjects: ProjectWorkspaceProject[] = [
   {
     id: "utn-2045-workbench",
@@ -556,6 +592,966 @@ const projectWorkspaceProjects: ProjectWorkspaceProject[] = [
     ],
   },
 ];
+
+const projectFeatureDetails: ProjectFeatureDetails = {
+  "utn-2045-workbench": {
+    overview: {
+      summary:
+        "بازرسی بدنه در فاز سوم قرار دارد و تمرکز اصلی روی هم‌ترازی سازه و تایید سنسورهای لرزش است.",
+      highlights: [
+        {
+          id: "utn2045-overview-progress",
+          label: "پیشرفت",
+          value: "۶۸٪",
+          tone: "positive",
+          helper: "براساس جدول پروژه",
+        },
+        {
+          id: "utn2045-overview-risk",
+          label: "ریسک لرزش",
+          value: "۲.۱g",
+          tone: "warning",
+          helper: "حد آستانه ۲.۵g",
+        },
+        {
+          id: "utn2045-overview-capa",
+          label: "CAPA-311",
+          value: "۲ گام باز",
+          helper: "در حال اقدام",
+        },
+      ],
+      checklist: [
+        {
+          id: "utn2045-overview-check-1",
+          label: "تایید نسخه ۳ نقشه در اتاق داده",
+          done: true,
+          note: "امضا شده توسط QA",
+        },
+        {
+          id: "utn2045-overview-check-2",
+          label: "ثبت قرائت حسگر لرزش (۴ نمونه)",
+          done: false,
+          note: "۲ نمونه باقی‌مانده",
+        },
+        {
+          id: "utn2045-overview-check-3",
+          label: "هماهنگی بازدید با بهره‌بردار",
+          done: false,
+        },
+      ],
+      actions: [
+        {
+          id: "utn2045-overview-action-1",
+          label: "ارسال Snapshot به مدیر پروژه",
+          helper: "PDF + نمودار",
+          intent: "primary",
+        },
+        {
+          id: "utn2045-overview-action-2",
+          label: "درخواست جلسه AsiaClass",
+          helper: "هماهنگی آنلاین",
+          intent: "secondary",
+        },
+      ],
+    },
+    docs: {
+      summary: "۴ سند مهرشده و آماده استفاده در اختیار تیم قرار دارد.",
+      highlights: [
+        {
+          id: "utn2045-docs-dwg",
+          label: "DWG",
+          value: "۲ نسخه",
+          helper: "نسخه ۳",
+        },
+        {
+          id: "utn2045-docs-pdf",
+          label: "PDF",
+          value: "۲ فایل",
+          tone: "positive",
+          helper: "مهرشده",
+        },
+        {
+          id: "utn2045-docs-log",
+          label: "LOG",
+          value: "آخرین ۲۴س",
+          helper: "به‌روزرسانی شد",
+        },
+      ],
+      checklist: [
+        {
+          id: "utn2045-docs-check-1",
+          label: "بازبینی PDF مهر شده",
+          done: true,
+        },
+        {
+          id: "utn2045-docs-check-2",
+          label: "آپلود نسخه DWG در اتاق داده",
+          done: true,
+        },
+        {
+          id: "utn2045-docs-check-3",
+          label: "الحاق لاگ QA به بسته مدارک",
+          done: false,
+        },
+      ],
+      actions: [
+        {
+          id: "utn2045-docs-action-1",
+          label: "آپلود فایل جدید",
+          helper: "Drag & Drop",
+          intent: "primary",
+        },
+        {
+          id: "utn2045-docs-action-2",
+          label: "اشتراک در اتاق داده ایمن",
+          helper: "لینک ۷۲ ساعته",
+          intent: "secondary",
+        },
+      ],
+    },
+    inspections: {
+      summary: "یک بازرسی میدانی تکمیل شده و گزارش آزمایشگاهی در حال تهیه است.",
+      highlights: [
+        {
+          id: "utn2045-inspection-field",
+          label: "Field",
+          value: "۱/۲",
+          helper: "بازدید امروز",
+        },
+        {
+          id: "utn2045-inspection-lab",
+          label: "Lab",
+          value: "در حال تحلیل",
+          tone: "warning",
+        },
+        {
+          id: "utn2045-inspection-owner",
+          label: "مسئول",
+          value: "ندا شریفی",
+        },
+      ],
+      checklist: [
+        {
+          id: "utn2045-inspection-check-1",
+          label: "ثبت عکس‌های لرزش در پورتال",
+          done: true,
+        },
+        {
+          id: "utn2045-inspection-check-2",
+          label: "ارسال نمونه فلز به آزمایشگاه",
+          done: false,
+          note: "Pickup ساعت ۱۶",
+        },
+        {
+          id: "utn2045-inspection-check-3",
+          label: "به‌روزرسانی نتایج در CAPA",
+          done: false,
+        },
+      ],
+      actions: [
+        {
+          id: "utn2045-inspection-action-1",
+          label: "ثبت گزارش میدانی",
+          helper: "فرم ۱۲ سطری",
+        },
+        {
+          id: "utn2045-inspection-action-2",
+          label: "دعوت از QA",
+          helper: "جلسه مشترک",
+          intent: "secondary",
+        },
+      ],
+    },
+    certificates: {
+      summary: "گواهینامه نهایی هنوز صادر نشده و مدارک در انتظار تایید AsiaClass است.",
+      highlights: [
+        {
+          id: "utn2045-cert-status",
+          label: "وضعیت",
+          value: "در انتظار",
+          tone: "warning",
+        },
+        {
+          id: "utn2045-cert-owner",
+          label: "مسئول",
+          value: "دفتر فنی",
+        },
+        {
+          id: "utn2045-cert-deadline",
+          label: "مهلت",
+          value: "۳ روز",
+        },
+      ],
+      checklist: [
+        {
+          id: "utn2045-cert-check-1",
+          label: "بررسی ترجمه رسمی",
+          done: true,
+        },
+        {
+          id: "utn2045-cert-check-2",
+          label: "الحاق مهر دیجیتال به بسته",
+          done: false,
+        },
+        {
+          id: "utn2045-cert-check-3",
+          label: "ارسال درخواست به AsiaClass",
+          done: false,
+        },
+      ],
+      actions: [
+        {
+          id: "utn2045-cert-action-1",
+          label: "ثبت درخواست تایید",
+          helper: "AsiaClass Portal",
+          intent: "primary",
+        },
+        {
+          id: "utn2045-cert-action-2",
+          label: "به‌روزرسانی وضعیت در داشبورد",
+          intent: "ghost",
+        },
+      ],
+    },
+    stamps: {
+      summary: "مهر دیجیتال برای نسخه ۳ هنوز فعال نشده و نیاز به تایید سرپرست دارد.",
+      highlights: [
+        {
+          id: "utn2045-stamp-need",
+          label: "مهر موردنیاز",
+          value: "۱",
+          tone: "warning",
+        },
+        {
+          id: "utn2045-stamp-ready",
+          label: "نسخه آماده",
+          value: "DWG v3",
+        },
+        {
+          id: "utn2045-stamp-signer",
+          label: "تکنسین",
+          value: "ندا شریفی",
+        },
+      ],
+      checklist: [
+        {
+          id: "utn2045-stamp-check-1",
+          label: "بررسی آخرین تغییرات نقشه",
+          done: true,
+        },
+        {
+          id: "utn2045-stamp-check-2",
+          label: "هماهنگی امضا با دفتر QA",
+          done: false,
+        },
+        {
+          id: "utn2045-stamp-check-3",
+          label: "تایید دو مرحله‌ای در AsiaClass",
+          done: false,
+        },
+      ],
+      actions: [
+        {
+          id: "utn2045-stamp-action-1",
+          label: "فعال‌سازی مهر دیجیتال",
+          intent: "primary",
+        },
+        {
+          id: "utn2045-stamp-action-2",
+          label: "ارسال برای امضای فنی",
+          intent: "secondary",
+        },
+      ],
+    },
+    capa: {
+      summary: "CAPA-311 دو اقدام باز دارد و باید تا پایان امروز به‌روزرسانی شود.",
+      highlights: [
+        {
+          id: "utn2045-capa-open",
+          label: "اقدام باز",
+          value: "۲",
+          tone: "warning",
+        },
+        {
+          id: "utn2045-capa-owner",
+          label: "مالک",
+          value: "سارا رحیمی",
+        },
+        {
+          id: "utn2045-capa-due",
+          label: "موعد",
+          value: "امروز",
+        },
+      ],
+      checklist: [
+        {
+          id: "utn2045-capa-check-1",
+          label: "تکمیل فرم CAPA در سیستم",
+          done: true,
+        },
+        {
+          id: "utn2045-capa-check-2",
+          label: "اتصال شواهد تصویری",
+          done: false,
+        },
+        {
+          id: "utn2045-capa-check-3",
+          label: "تایید نهایی توسط مدیر کیفیت",
+          done: false,
+        },
+      ],
+      actions: [
+        {
+          id: "utn2045-capa-action-1",
+          label: "به‌روزرسانی وضعیت CAPA",
+          intent: "primary",
+        },
+        {
+          id: "utn2045-capa-action-2",
+          label: "اشتراک با تیم بهره‌بردار",
+          intent: "ghost",
+        },
+      ],
+    },
+  },
+  "utn-1980-workbench": {
+    overview: {
+      summary:
+        "تحلیل نشتی سیستم روغن با تمرکز بر داده‌های فشار و دما ادامه دارد و تیم QA منتظر نتیجه آزمایش است.",
+      highlights: [
+        {
+          id: "utn1980-overview-progress",
+          label: "پیشرفت",
+          value: "۵۴٪",
+          tone: "warning",
+          helper: "نیازمند تسریع",
+        },
+        {
+          id: "utn1980-overview-risk",
+          label: "ریسک آلودگی",
+          value: "۱.۸٪",
+        },
+        {
+          id: "utn1980-overview-capa",
+          label: "CAPA-118",
+          value: "بسته شد",
+          tone: "positive",
+        },
+      ],
+      checklist: [
+        {
+          id: "utn1980-overview-check-1",
+          label: "بررسی لاگ فشار آنلاین",
+          done: true,
+        },
+        {
+          id: "utn1980-overview-check-2",
+          label: "هماهنگی تیم کارگاه برای تعویض اورینگ",
+          done: false,
+        },
+        {
+          id: "utn1980-overview-check-3",
+          label: "جمع‌بندی برای ارسال به QA",
+          done: false,
+        },
+      ],
+      actions: [
+        {
+          id: "utn1980-overview-action-1",
+          label: "ثبت یادداشت میدانی",
+          intent: "primary",
+        },
+        {
+          id: "utn1980-overview-action-2",
+          label: "هم‌رسانی وضعیت با مشتری",
+          intent: "secondary",
+        },
+      ],
+    },
+    docs: {
+      summary: "۶ سند تحلیلی شامل گزارش تست و عکس‌ها در پوشه پروژه موجود است.",
+      highlights: [
+        {
+          id: "utn1980-docs-lab",
+          label: "Lab",
+          value: "۳ پیوست",
+        },
+        {
+          id: "utn1980-docs-photos",
+          label: "عکس",
+          value: "۱۲ فایل",
+          tone: "positive",
+        },
+        {
+          id: "utn1980-docs-capalog",
+          label: "CAPA",
+          value: "۲ لینک",
+        },
+      ],
+      checklist: [
+        {
+          id: "utn1980-docs-check-1",
+          label: "آپلود عکس اورینگ",
+          done: true,
+        },
+        {
+          id: "utn1980-docs-check-2",
+          label: "تطبیق گزارش فشار با سنسور",
+          done: false,
+        },
+        {
+          id: "utn1980-docs-check-3",
+          label: "بررسی مهر AsiaClass",
+          done: true,
+        },
+      ],
+      actions: [
+        {
+          id: "utn1980-docs-action-1",
+          label: "ارسال بسته مستندات",
+          intent: "primary",
+        },
+        {
+          id: "utn1980-docs-action-2",
+          label: "باز کردن در اتاق داده",
+          intent: "secondary",
+        },
+      ],
+    },
+    inspections: {
+      summary: "دو بازرسی UT/MT برنامه‌ریزی شده و یکی از آنها تکمیل شده است.",
+      highlights: [
+        {
+          id: "utn1980-inspection-ut",
+          label: "UT",
+          value: "۱/۲",
+        },
+        {
+          id: "utn1980-inspection-mt",
+          label: "MT",
+          value: "برنامه‌ریزی",
+          tone: "warning",
+        },
+        {
+          id: "utn1980-inspection-tech",
+          label: "تکنسین",
+          value: "محمد رضوی",
+        },
+      ],
+      checklist: [
+        {
+          id: "utn1980-inspection-check-1",
+          label: "هماهنگی با آزمایشگاه سیار",
+          done: true,
+        },
+        {
+          id: "utn1980-inspection-check-2",
+          label: "ثبت لاگ دمای سیال",
+          done: false,
+        },
+        {
+          id: "utn1980-inspection-check-3",
+          label: "به‌روزرسانی فرم MT",
+          done: false,
+        },
+      ],
+      actions: [
+        {
+          id: "utn1980-inspection-action-1",
+          label: "افزودن نتیجه جدید",
+          intent: "primary",
+        },
+        {
+          id: "utn1980-inspection-action-2",
+          label: "اشتراک با QA",
+          intent: "ghost",
+        },
+      ],
+    },
+    certificates: {
+      summary: "یک گواهینامه آماده و در انتظار تایید QA برای انتشار است.",
+      highlights: [
+        {
+          id: "utn1980-cert-ready",
+          label: "تعداد",
+          value: "۱",
+          tone: "positive",
+        },
+        {
+          id: "utn1980-cert-status",
+          label: "وضعیت",
+          value: "QA",
+        },
+        {
+          id: "utn1980-cert-due",
+          label: "مهلت",
+          value: "فردا",
+        },
+      ],
+      checklist: [
+        {
+          id: "utn1980-cert-check-1",
+          label: "پیوست مهر دیجیتال",
+          done: true,
+        },
+        {
+          id: "utn1980-cert-check-2",
+          label: "بازبینی ترجمه",
+          done: false,
+        },
+        {
+          id: "utn1980-cert-check-3",
+          label: "ارسال برای مشتری",
+          done: false,
+        },
+      ],
+      actions: [
+        {
+          id: "utn1980-cert-action-1",
+          label: "درخواست تایید QA",
+          intent: "primary",
+        },
+        {
+          id: "utn1980-cert-action-2",
+          label: "دانلود PDF مهرشده",
+          intent: "secondary",
+        },
+      ],
+    },
+    stamps: {
+      summary: "یک مهر دیجیتال قبلاً ثبت شده و نسخه دوم در صف تایید است.",
+      highlights: [
+        {
+          id: "utn1980-stamp-count",
+          label: "مهر فعال",
+          value: "۱",
+          tone: "positive",
+        },
+        {
+          id: "utn1980-stamp-pending",
+          label: "در انتظار",
+          value: "۱",
+          tone: "warning",
+        },
+        {
+          id: "utn1980-stamp-signer",
+          label: "امضاکننده",
+          value: "محمد رضوی",
+        },
+      ],
+      checklist: [
+        {
+          id: "utn1980-stamp-check-1",
+          label: "تایید تغییرات نقشه",
+          done: true,
+        },
+        {
+          id: "utn1980-stamp-check-2",
+          label: "هماهنگی با AsiaClass",
+          done: false,
+        },
+        {
+          id: "utn1980-stamp-check-3",
+          label: "ثبت امضای سرپرست",
+          done: false,
+        },
+      ],
+      actions: [
+        {
+          id: "utn1980-stamp-action-1",
+          label: "افزودن مهر جدید",
+          intent: "primary",
+        },
+        {
+          id: "utn1980-stamp-action-2",
+          label: "پیگیری تایید",
+          intent: "ghost",
+        },
+      ],
+    },
+    capa: {
+      summary: "دو اقدام اصلاحی برای پایش نشتی بسته شده و گزارش تکمیلی باید بارگذاری شود.",
+      highlights: [
+        {
+          id: "utn1980-capa-count",
+          label: "اقدام",
+          value: "۲",
+          tone: "positive",
+        },
+        {
+          id: "utn1980-capa-status",
+          label: "وضعیت",
+          value: "تایید شد",
+        },
+        {
+          id: "utn1980-capa-report",
+          label: "گزارش",
+          value: "در حال تهیه",
+          tone: "warning",
+        },
+      ],
+      checklist: [
+        {
+          id: "utn1980-capa-check-1",
+          label: "به‌روزرسانی عکس قبل/بعد",
+          done: true,
+        },
+        {
+          id: "utn1980-capa-check-2",
+          label: "ثبت تایید مدیر پروژه",
+          done: false,
+        },
+        {
+          id: "utn1980-capa-check-3",
+          label: "ارسال گزارش به مشتری",
+          done: false,
+        },
+      ],
+      actions: [
+        {
+          id: "utn1980-capa-action-1",
+          label: "تکمیل گزارش CAPA",
+          intent: "primary",
+        },
+        {
+          id: "utn1980-capa-action-2",
+          label: "به اشتراک‌گذاری در اتاق داده",
+          intent: "secondary",
+        },
+      ],
+    },
+  },
+  "utn-2101-workbench": {
+    overview: {
+      summary:
+        "پروژه شبکه الکتریک در فاز پایانی قرار دارد و تمرکز روی تایید نرم‌افزار و کابل‌کشی مسیر C است.",
+      highlights: [
+        {
+          id: "utn2101-overview-progress",
+          label: "پیشرفت",
+          value: "۸۱٪",
+          tone: "positive",
+        },
+        {
+          id: "utn2101-overview-risk",
+          label: "ریسک نرم‌افزار",
+          value: "تاخیر",
+          tone: "warning",
+        },
+        {
+          id: "utn2101-overview-owner",
+          label: "مالک",
+          value: "مهدی سلیمانی",
+        },
+      ],
+      checklist: [
+        {
+          id: "utn2101-overview-check-1",
+          label: "تکمیل تست کابل مسیر C",
+          done: true,
+        },
+        {
+          id: "utn2101-overview-check-2",
+          label: "مرور Firmware v5.4",
+          done: false,
+        },
+        {
+          id: "utn2101-overview-check-3",
+          label: "هماهنگی با تیم نرم‌افزار",
+          done: false,
+        },
+      ],
+      actions: [
+        {
+          id: "utn2101-overview-action-1",
+          label: "ارسال وضعیت به مدیریت",
+          intent: "primary",
+        },
+        {
+          id: "utn2101-overview-action-2",
+          label: "رزرو جلسه تست نرم‌افزار",
+          intent: "secondary",
+        },
+      ],
+    },
+    docs: {
+      summary: "۵ سند دیجیتال شامل نقشه کابل، چک‌لیست QA و فایل Firmware آماده است.",
+      highlights: [
+        {
+          id: "utn2101-docs-cable",
+          label: "نقشه کابل",
+          value: "۲ فایل",
+        },
+        {
+          id: "utn2101-docs-qa",
+          label: "QA",
+          value: "۱ چک‌لیست",
+        },
+        {
+          id: "utn2101-docs-fw",
+          label: "Firmware",
+          value: "v5.4",
+          tone: "warning",
+        },
+      ],
+      checklist: [
+        {
+          id: "utn2101-docs-check-1",
+          label: "آپلود نسخه جدید Firmware",
+          done: false,
+        },
+        {
+          id: "utn2101-docs-check-2",
+          label: "ضمیمه چک‌لیست QA",
+          done: true,
+        },
+        {
+          id: "utn2101-docs-check-3",
+          label: "بررسی دسترسی AsiaClass",
+          done: true,
+        },
+      ],
+      actions: [
+        {
+          id: "utn2101-docs-action-1",
+          label: "باز کردن در اتاق داده",
+          intent: "primary",
+        },
+        {
+          id: "utn2101-docs-action-2",
+          label: "ارسال برای تایید QA",
+          intent: "secondary",
+        },
+      ],
+    },
+    inspections: {
+      summary: "یک بازرسی QA مشترک انجام شده و نتیجه نهایی در انتظار امضا است.",
+      highlights: [
+        {
+          id: "utn2101-inspection-qa",
+          label: "QA",
+          value: "۱",
+          tone: "positive",
+        },
+        {
+          id: "utn2101-inspection-field",
+          label: "Field",
+          value: "۰",
+        },
+        {
+          id: "utn2101-inspection-status",
+          label: "وضعیت",
+          value: "در انتظار امضا",
+          tone: "warning",
+        },
+      ],
+      checklist: [
+        {
+          id: "utn2101-inspection-check-1",
+          label: "جمع‌آوری عکس تابلو 1C",
+          done: true,
+        },
+        {
+          id: "utn2101-inspection-check-2",
+          label: "تایید نتایج تست عایقی",
+          done: true,
+        },
+        {
+          id: "utn2101-inspection-check-3",
+          label: "ثبت امضای مشترک QA",
+          done: false,
+        },
+      ],
+      actions: [
+        {
+          id: "utn2101-inspection-action-1",
+          label: "ارسال گزارش QA",
+          intent: "primary",
+        },
+        {
+          id: "utn2101-inspection-action-2",
+          label: "ثبت یادداشت جدید",
+          intent: "ghost",
+        },
+      ],
+    },
+    certificates: {
+      summary: "گواهینامه نرم‌افزاری در حال آماده‌سازی و نیازمند آخرین آزمون است.",
+      highlights: [
+        {
+          id: "utn2101-cert-count",
+          label: "تعداد",
+          value: "۱",
+        },
+        {
+          id: "utn2101-cert-status",
+          label: "وضعیت",
+          value: "در حال تهیه",
+          tone: "warning",
+        },
+        {
+          id: "utn2101-cert-due",
+          label: "موعد",
+          value: "۵ روز",
+        },
+      ],
+      checklist: [
+        {
+          id: "utn2101-cert-check-1",
+          label: "تکمیل تست نرم‌افزار",
+          done: false,
+        },
+        {
+          id: "utn2101-cert-check-2",
+          label: "پیگیری امضا از AsiaClass",
+          done: false,
+        },
+        {
+          id: "utn2101-cert-check-3",
+          label: "ضمیمه گزارش QA",
+          done: true,
+        },
+      ],
+      actions: [
+        {
+          id: "utn2101-cert-action-1",
+          label: "ایجاد پیش‌نویس گواهینامه",
+          intent: "primary",
+        },
+        {
+          id: "utn2101-cert-action-2",
+          label: "ارسال به AsiaClass",
+          intent: "secondary",
+        },
+      ],
+    },
+    stamps: {
+      summary: "دو مهر دیجیتال برای نسخه‌های Firmware فعال است و نسخه سوم در صف تایید قرار دارد.",
+      highlights: [
+        {
+          id: "utn2101-stamp-active",
+          label: "مهر فعال",
+          value: "۲",
+          tone: "positive",
+        },
+        {
+          id: "utn2101-stamp-pending",
+          label: "در انتظار",
+          value: "۱",
+          tone: "warning",
+        },
+        {
+          id: "utn2101-stamp-owner",
+          label: "مسئول",
+          value: "مهدی سلیمانی",
+        },
+      ],
+      checklist: [
+        {
+          id: "utn2101-stamp-check-1",
+          label: "بررسی Firmware v5.4",
+          done: true,
+        },
+        {
+          id: "utn2101-stamp-check-2",
+          label: "هماهنگی با تیم QA",
+          done: true,
+        },
+        {
+          id: "utn2101-stamp-check-3",
+          label: "ارسال برای امضای AsiaClass",
+          done: false,
+        },
+      ],
+      actions: [
+        {
+          id: "utn2101-stamp-action-1",
+          label: "افزودن مهر Firmware",
+          intent: "primary",
+        },
+        {
+          id: "utn2101-stamp-action-2",
+          label: "ارسال یادآور",
+          intent: "ghost",
+        },
+      ],
+    },
+    capa: {
+      summary: "CAPA-412 بسته شده اما نیاز است گزارش نهایی در اختیار مشتری قرار گیرد.",
+      highlights: [
+        {
+          id: "utn2101-capa-status",
+          label: "وضعیت",
+          value: "بسته شد",
+          tone: "positive",
+        },
+        {
+          id: "utn2101-capa-owner",
+          label: "مالک",
+          value: "دفتر فنی",
+        },
+        {
+          id: "utn2101-capa-share",
+          label: "اشتراک",
+          value: "در انتظار",
+          tone: "warning",
+        },
+      ],
+      checklist: [
+        {
+          id: "utn2101-capa-check-1",
+          label: "ارسال گزارش نهایی",
+          done: false,
+        },
+        {
+          id: "utn2101-capa-check-2",
+          label: "به‌روزرسانی وضعیت در داشبورد",
+          done: true,
+        },
+        {
+          id: "utn2101-capa-check-3",
+          label: "تایید مشتری",
+          done: false,
+        },
+      ],
+      actions: [
+        {
+          id: "utn2101-capa-action-1",
+          label: "اشتراک CAPA با مشتری",
+          intent: "primary",
+        },
+        {
+          id: "utn2101-capa-action-2",
+          label: "دانلود مستند تکمیلی",
+          intent: "secondary",
+        },
+      ],
+    },
+  },
+};
+
+const defaultFeatureSelections: Record<string, string> =
+  projectWorkspaceProjects.reduce((acc, project) => {
+    acc[project.id] = project.features[0]?.id ?? "overview";
+    return acc;
+  }, {} as Record<string, string>);
+
+const createInitialFeatureChecklistState = (): FeatureChecklistState => {
+  const state: FeatureChecklistState = {};
+  Object.entries(projectFeatureDetails).forEach(([projectId, features]) => {
+    state[projectId] = {};
+    Object.entries(features).forEach(([featureId, detail]) => {
+      state[projectId][featureId] = detail.checklist.reduce(
+        (acc, item) => {
+          acc[item.id] = item.done;
+          return acc;
+        },
+        {} as Record<string, boolean>
+      );
+    });
+  });
+  return state;
+};
 
 type ProjectApprovalState = {
   stampRequested: boolean;
@@ -1132,7 +2128,14 @@ function TechnicianDashboardView() {
       {} as Record<string, ProjectApprovalState>
     )
   );
-  const [projectActionMessage, setProjectActionMessage] = useState("");
+  const [activeFeatureByProject, setActiveFeatureByProject] = useState<
+    Record<string, string>
+  >(() => ({ ...defaultFeatureSelections }));
+  const [featureChecklistState, setFeatureChecklistState] =
+    useState<FeatureChecklistState>(() => createInitialFeatureChecklistState());
+  const [projectActionNotice, setProjectActionNotice] = useState<
+    { projectId: string; message: string } | null
+  >(null);
 
   const [actionModalOpen, setActionModalOpen] = useState(false);
   const [actionTitle, setActionTitle] = useState("");
@@ -1728,6 +2731,26 @@ function TechnicianDashboardView() {
       }
     : { stampRequested: false, signatureRequested: false };
 
+  const selectedProjectFeatureId = selectedProject
+    ? activeFeatureByProject[selectedProject.id] ??
+      selectedProject.features[0]?.id ??
+      null
+    : null;
+
+  const selectedProjectFeatureDetail =
+    selectedProject && selectedProjectFeatureId
+      ? projectFeatureDetails[selectedProject.id]?.[
+          selectedProjectFeatureId
+        ]
+      : undefined;
+
+  const selectedFeatureChecklistState =
+    selectedProject && selectedProjectFeatureId
+      ? featureChecklistState[selectedProject.id]?.[
+          selectedProjectFeatureId
+        ] ?? {}
+      : {};
+
   useEffect(() => {
     if (filteredBoardItems.length === 0) {
       setSelectedBoardId(null);
@@ -1737,6 +2760,65 @@ function TechnicianDashboardView() {
       setSelectedBoardId(filteredBoardItems[0].id);
     }
   }, [filteredBoardItems, selectedBoardId]);
+
+  useEffect(() => {
+    if (!selectedProject) return;
+    setActiveFeatureByProject((prev) => {
+      if (prev[selectedProject.id]) return prev;
+      return {
+        ...prev,
+        [selectedProject.id]: selectedProject.features[0]?.id ?? "overview",
+      };
+    });
+  }, [selectedProject]);
+
+  useEffect(() => {
+    if (!projectActionNotice) return;
+    const timer = setTimeout(() => setProjectActionNotice(null), 4000);
+    return () => clearTimeout(timer);
+  }, [projectActionNotice]);
+
+  const handleSelectProject = (projectId: string) => {
+    setSelectedProjectId(projectId);
+    setProjectActionNotice((prev) =>
+      prev?.projectId === projectId ? prev : null
+    );
+  };
+
+  const handleSelectProjectFeature = (featureId: string) => {
+    if (!selectedProject) return;
+    setActiveFeatureByProject((prev) => ({
+      ...prev,
+      [selectedProject.id]: featureId,
+    }));
+  };
+
+  const handleToggleFeatureChecklist = (checklistId: string) => {
+    if (!selectedProject || !selectedProjectFeatureId) return;
+    setFeatureChecklistState((prev) => {
+      const projectState = prev[selectedProject.id] ?? {};
+      const featureState = projectState[selectedProjectFeatureId] ?? {};
+      const currentValue = featureState[checklistId];
+      return {
+        ...prev,
+        [selectedProject.id]: {
+          ...projectState,
+          [selectedProjectFeatureId]: {
+            ...featureState,
+            [checklistId]: typeof currentValue === "boolean" ? !currentValue : true,
+          },
+        },
+      };
+    });
+  };
+
+  const handleRunFeatureAction = (actionLabel: string) => {
+    if (!selectedProject) return;
+    setProjectActionNotice({
+      projectId: selectedProject.id,
+      message: `${actionLabel} برای ${selectedProject.utn} ثبت شد.`,
+    });
+  };
 
   const handleSelectCalendarDay = (day: number) => {
     setSelectedCalendarDay(day);
@@ -1983,11 +3065,13 @@ function TechnicianDashboardView() {
       (item) => item.id === projectId
     );
     const projectLabel = project?.utn ?? "پروژه";
-    setProjectActionMessage(
-      action === "stamp"
-        ? `مهر دیجیتال آسیاکلاس برای ${projectLabel} فعال شد.`
-        : `امضای الکترونیکی ${projectLabel} ثبت شد.`
-    );
+    setProjectActionNotice({
+      projectId,
+      message:
+        action === "stamp"
+          ? `مهر دیجیتال آسیاکلاس برای ${projectLabel} فعال شد.`
+          : `امضای الکترونیکی ${projectLabel} ثبت شد.`,
+    });
   };
 
   return (
@@ -3281,25 +4365,155 @@ function TechnicianDashboardView() {
                   </div>
 
                   <div className="grid gap-2 sm:grid-cols-3">
-                    {selectedProject.features.map((feature) => (
-                      <div
-                        key={`${selectedProject.id}-${feature.id}`}
-                        className="rounded-2xl border border-dashed border-gray-200 bg-gray-50 px-3 py-2"
-                      >
-                        <div className="flex flex-row-reverse items-center justify-between text-[11px] text-gray-500">
-                          <span>{feature.label}</span>
-                          {typeof feature.count === "number" && (
-                            <span className="font-mono text-sm text-gray-900">
-                              {feature.count}
+                    {selectedProject.features.map((feature) => {
+                      const isActive = feature.id === selectedProjectFeatureId;
+                      return (
+                        <button
+                          type="button"
+                          key={`${selectedProject.id}-${feature.id}`}
+                          onClick={() => handleSelectProjectFeature(feature.id)}
+                          className={`text-right rounded-2xl border px-3 py-2 transition focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                            isActive
+                              ? "border-blue-400 bg-blue-50"
+                              : "border-dashed border-gray-200 bg-gray-50"
+                          }`}
+                          aria-pressed={isActive}
+                        >
+                          <div className="flex flex-row-reverse items-center justify-between text-[11px] text-gray-600">
+                            <span className={isActive ? "text-blue-700" : "text-gray-600"}>
+                              {feature.label}
                             </span>
+                            {typeof feature.count === "number" && (
+                              <span
+                                className={`font-mono text-sm ${
+                                  isActive ? "text-blue-700" : "text-gray-900"
+                                }`}
+                              >
+                                {feature.count}
+                              </span>
+                            )}
+                          </div>
+                          <p
+                            className={`text-[10px] mt-1 ${
+                              isActive ? "text-blue-500" : "text-gray-400"
+                            }`}
+                          >
+                            {feature.helper}
+                          </p>
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {selectedProjectFeatureDetail && (
+                    <div className="grid gap-3 lg:grid-cols-[1.2fr,0.8fr]">
+                      <div className="rounded-2xl border border-gray-100 bg-white/90 p-4 text-right space-y-3">
+                        <p className="text-sm text-gray-700">
+                          {selectedProjectFeatureDetail.summary}
+                        </p>
+                        <div className="grid gap-2 sm:grid-cols-3">
+                          {selectedProjectFeatureDetail.highlights.map(
+                            (highlight) => {
+                              const toneClass =
+                                highlight.tone === "warning"
+                                  ? "border-amber-200 bg-amber-50 text-amber-700"
+                                  : highlight.tone === "positive"
+                                  ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+                                  : "border-gray-200 bg-gray-50 text-gray-700";
+                              return (
+                                <div
+                                  key={highlight.id}
+                                  className={`rounded-xl border px-3 py-2 text-right ${toneClass}`}
+                                >
+                                  <p className="text-[11px] font-medium">
+                                    {highlight.label}
+                                  </p>
+                                  <p className="text-base font-semibold">
+                                    {highlight.value}
+                                  </p>
+                                  {highlight.helper && (
+                                    <p className="text-[10px] opacity-80">
+                                      {highlight.helper}
+                                    </p>
+                                  )}
+                                </div>
+                              );
+                            }
                           )}
                         </div>
-                        <p className="text-[10px] text-gray-400 mt-1">
-                          {feature.helper}
-                        </p>
                       </div>
-                    ))}
-                  </div>
+                      <div className="rounded-2xl border border-gray-100 bg-white/90 p-4 text-right space-y-3">
+                        <div className="flex items-center justify-between flex-row-reverse">
+                          <h5 className="text-sm font-semibold text-gray-900">
+                            چک‌لیست اقدام فوری
+                          </h5>
+                          <span className="text-[11px] text-gray-400">
+                            قابل تیک‌زدن توسط تکنسین
+                          </span>
+                        </div>
+                        <div className="space-y-2">
+                          {selectedProjectFeatureDetail.checklist.map(
+                            (item) => {
+                              const isChecked =
+                                selectedFeatureChecklistState[item.id];
+                              return (
+                                <label
+                                  key={item.id}
+                                  className={`flex items-center justify-between flex-row-reverse rounded-2xl border px-3 py-2 text-sm cursor-pointer ${
+                                    isChecked
+                                      ? "border-emerald-300 bg-emerald-50"
+                                      : "border-gray-100 bg-white"
+                                  }`}
+                                >
+                                  <div className="flex flex-col items-end">
+                                    <span
+                                      className={`font-medium ${
+                                        isChecked
+                                          ? "text-emerald-700"
+                                          : "text-gray-700"
+                                      }`}
+                                    >
+                                      {item.label}
+                                    </span>
+                                    {item.note && (
+                                      <span className="text-[11px] text-gray-400">
+                                        {item.note}
+                                      </span>
+                                    )}
+                                  </div>
+                                  <input
+                                    type="checkbox"
+                                    checked={!!isChecked}
+                                    onChange={() => handleToggleFeatureChecklist(item.id)}
+                                    className="w-4 h-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
+                                  />
+                                </label>
+                              );
+                            }
+                          )}
+                        </div>
+                        <div className="flex flex-wrap gap-2 justify-end">
+                          {selectedProjectFeatureDetail.actions.map((action) => (
+                            <Button
+                              key={action.id}
+                              size="sm"
+                              variant={action.intent ?? "primary"}
+                              onClick={() => handleRunFeatureAction(action.label)}
+                            >
+                              <div className="flex flex-col">
+                                <span>{action.label}</span>
+                                {action.helper && (
+                                  <span className="text-[10px] font-normal opacity-80">
+                                    {action.helper}
+                                  </span>
+                                )}
+                              </div>
+                            </Button>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
 
                   <div className="flex flex-row-reverse flex-wrap gap-2 text-[11px]">
                     <span
@@ -3338,9 +4552,9 @@ function TechnicianDashboardView() {
                       افزودن امضای فنی
                     </Button>
                   </div>
-                  {projectActionMessage && (
+                  {projectActionNotice?.projectId === selectedProject.id && (
                     <p className="text-[11px] text-emerald-600">
-                      {projectActionMessage}
+                      {projectActionNotice.message}
                     </p>
                   )}
                 </div>
@@ -3368,11 +4582,12 @@ function TechnicianDashboardView() {
                       signatureRequested: false,
                     };
                   const isActive = selectedProject.id === project.id;
+                  const activeFeatureId = activeFeatureByProject[project.id];
                   return (
                     <button
                       key={project.id}
                       type="button"
-                      onClick={() => setSelectedProjectId(project.id)}
+                      onClick={() => handleSelectProject(project.id)}
                       className={`w-full text-right rounded-2xl border px-4 py-3 transition focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                         isActive
                           ? "border-blue-400 bg-blue-50/60 shadow-sm"
@@ -3396,7 +4611,11 @@ function TechnicianDashboardView() {
                         {project.features.map((feature) => (
                           <div
                             key={`${project.id}-${feature.id}`}
-                            className="rounded-xl border border-dashed border-gray-200 bg-gray-50/80 px-2 py-1 flex flex-col items-end"
+                            className={`rounded-xl border px-2 py-1 flex flex-col items-end ${
+                              feature.id === activeFeatureId
+                                ? "border-blue-300 bg-blue-50"
+                                : "border-dashed border-gray-200 bg-gray-50/80"
+                            }`}
                           >
                             <span className="text-gray-500">{feature.label}</span>
                             <span className="text-sm font-semibold text-gray-900">
