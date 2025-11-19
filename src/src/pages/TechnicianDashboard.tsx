@@ -2278,6 +2278,7 @@ function TechnicianDashboardView() {
   const snapshot = workspaceSnapshots[activeTab];
   const islands = journeys[activeTab] ?? [];
   const isReportsTab = activeTab === "reports";
+  const isWorkbenchTab = activeTab === "workbench";
   const currentReportMetrics = reportRangeMetrics[reportRange];
   const currentReportDistribution = reportDistributionByRange[reportRange];
   const currentReportSpark = reportSparkByRange[reportRange];
@@ -3777,6 +3778,446 @@ function TechnicianDashboardView() {
             </Card>
           </section>
         </div>
+      ) : isWorkbenchTab ? (
+        <div className="space-y-8" dir="rtl" lang="fa">
+          {selectedProject && (
+            <section className="grid gap-6 xl:grid-cols-[1.1fr,0.9fr]">
+              <GlassCard className="p-6 space-y-5 bg-white/95 border border-gray-100 shadow-sm">
+                <div className="flex flex-row-reverse items-start justify-between gap-4">
+                  <div className="text-right space-y-1">
+                    <p className="text-xs text-gray-500">
+                      اتاق پروژه آسیاصنعت کلاس · اتصال مستقیم با پلتفرم AsiaClass
+                    </p>
+                    <h3 className="text-lg font-semibold text-gray-900">
+                      فضای کاری نقشه + مدارک دیجیتال
+                    </h3>
+                    <p className="text-xs text-gray-500">{selectedProject.focus}</p>
+                  </div>
+                  <a
+                    href="https://asiaclass.org/en/"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-[11px] text-blue-700"
+                  >
+                    AsiaClass.org
+                    <Icon name="arrowUpRight" size={12} />
+                  </a>
+                </div>
+
+                <div className="grid gap-4 lg:grid-cols-[1.1fr,0.9fr] items-start">
+                  <div className="relative rounded-[28px] border border-gray-200 bg-slate-900 text-white p-5 overflow-hidden">
+                    <div
+                      className="absolute inset-0 opacity-30"
+                      style={{
+                        backgroundImage:
+                          "linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px)",
+                        backgroundSize: "24px 24px",
+                      }}
+                    />
+                    <div className="relative space-y-4">
+                      <div className="flex flex-row-reverse items-center justify-between text-xs text-white/70">
+                        <span className="px-2 py-0.5 rounded-full border border-white/30">
+                          {selectedProject.utn}
+                        </span>
+                        <span>{selectedProject.port}</span>
+                      </div>
+                      <div className="rounded-2xl border border-white/20 bg-white/5 p-4 min-h-[160px] flex flex-col items-center justify-center text-center space-y-2">
+                        <p className="text-sm font-semibold text-white">
+                          {selectedProject.vessel}
+                        </p>
+                        <p className="text-xs text-white/70">{selectedProject.focus}</p>
+                        <div className="flex flex-row-reverse gap-2 text-[10px] text-white/80">
+                          <span className="px-2 py-0.5 rounded-full border border-white/30">
+                            {selectedProject.risk}
+                          </span>
+                          <span className="px-2 py-0.5 rounded-full border border-white/30">
+                            {selectedProject.capa}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-2 gap-2 text-right">
+                        {selectedProject.callouts.map((callout) => (
+                          <div
+                            key={callout.id}
+                            className="rounded-2xl border border-white/15 bg-white/5 px-3 py-2"
+                          >
+                            <p className="text-[10px] text-white/60">{callout.label}</p>
+                            <p className="text-sm font-semibold">{callout.detail}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-4 text-right">
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="rounded-2xl border border-gray-100 bg-white px-3 py-2">
+                        <p className="text-[11px] text-gray-500">مسئول پرونده</p>
+                        <p className="text-sm font-semibold text-gray-900">
+                          {selectedProject.owner}
+                        </p>
+                      </div>
+                      <div className="rounded-2xl border border-gray-100 bg-white px-3 py-2">
+                        <p className="text-[11px] text-gray-500">موعد</p>
+                        <p className="text-sm font-semibold text-gray-900">
+                          {selectedProject.due}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div>
+                      <div className="flex flex-row-reverse items-center justify-between text-[11px] text-gray-500">
+                        <span>پیشرفت پرونده</span>
+                        <span className="font-semibold text-gray-900">
+                          {selectedProject.progress}٪
+                        </span>
+                      </div>
+                      <div className="mt-1 h-1.5 rounded-full bg-gray-100 overflow-hidden">
+                        <div
+                          className="h-full rounded-full bg-blue-500"
+                          style={{ width: `${selectedProject.progress}%` }}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid gap-2 sm:grid-cols-3">
+                      {selectedProject.features.map((feature) => {
+                        const isActive = feature.id === selectedProjectFeatureId;
+                        return (
+                          <button
+                            type="button"
+                            key={`${selectedProject.id}-${feature.id}`}
+                            onClick={() => handleSelectProjectFeature(feature.id)}
+                            className={`text-right rounded-2xl border px-3 py-2 transition focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                              isActive
+                                ? "border-blue-400 bg-blue-50"
+                                : "border-dashed border-gray-200 bg-gray-50"
+                            }`}
+                            aria-pressed={isActive}
+                          >
+                            <div className="flex flex-row-reverse items-center justify-between text-[11px] text-gray-600">
+                              <span className={isActive ? "text-blue-700" : "text-gray-600"}>
+                                {feature.label}
+                              </span>
+                              {typeof feature.count === "number" && (
+                                <span
+                                  className={`font-mono text-sm ${
+                                    isActive ? "text-blue-700" : "text-gray-900"
+                                  }`}
+                                >
+                                  {feature.count}
+                                </span>
+                              )}
+                            </div>
+                            <p
+                              className={`text-[10px] mt-1 ${
+                                isActive ? "text-blue-500" : "text-gray-400"
+                              }`}
+                            >
+                              {feature.helper}
+                            </p>
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    {selectedProjectFeatureDetail && (
+                      <div className="grid gap-3 lg:grid-cols-[1.2fr,0.8fr]">
+                        <div className="rounded-2xl border border-gray-100 bg-white/90 p-4 text-right space-y-3">
+                          <p className="text-sm text-gray-700">
+                            {selectedProjectFeatureDetail.summary}
+                          </p>
+                          {selectedFeatureChecklistMeta.total > 0 && (
+                            <div className="space-y-1">
+                              <div className="flex flex-row-reverse items-center justify-between text-[11px] text-gray-500">
+                                <span>پیشرفت چک‌لیست</span>
+                                <span className="font-semibold text-gray-900">
+                                  {selectedFeatureChecklistMeta.completed}/
+                                  {selectedFeatureChecklistMeta.total} ·
+                                  {selectedFeatureChecklistMeta.percent}%
+                                </span>
+                              </div>
+                              <div className="h-1.5 rounded-full bg-gray-100 overflow-hidden">
+                                <div
+                                  className="h-full rounded-full bg-emerald-500"
+                                  style={{
+                                    width: `${selectedFeatureChecklistMeta.percent}%`,
+                                  }}
+                                />
+                              </div>
+                            </div>
+                          )}
+                          <div className="grid gap-2 lg:grid-cols-2">
+                            {selectedProjectFeatureDetail.highlights.map((item) => (
+                              <div
+                                key={item.id}
+                                className="rounded-2xl border border-gray-100 bg-gray-50 px-3 py-2"
+                              >
+                                <p className="text-[10px] text-gray-500">
+                                  {item.label}
+                                </p>
+                                <p className="text-sm font-semibold text-gray-900">
+                                  {item.value}
+                                </p>
+                              </div>
+                            ))}
+                          </div>
+                          <div className="space-y-2">
+                            {selectedProjectFeatureDetail.checklist.map((item) => {
+                              const isChecked = selectedFeatureChecklistState?.[item.id];
+                              return (
+                                <label
+                                  key={item.id}
+                                  className={`flex items-center justify-between rounded-2xl border px-3 py-2 gap-3 flex-row-reverse cursor-pointer ${
+                                    isChecked
+                                      ? "border-emerald-300 bg-emerald-50"
+                                      : "border-gray-100 bg-white"
+                                  }`}
+                                >
+                                  <div className="flex flex-col items-end">
+                                    <span
+                                      className={`font-medium ${
+                                        isChecked
+                                          ? "text-emerald-700"
+                                          : "text-gray-700"
+                                      }`}
+                                    >
+                                      {item.label}
+                                    </span>
+                                    {item.note && (
+                                      <span className="text-[11px] text-gray-400">
+                                        {item.note}
+                                      </span>
+                                    )}
+                                  </div>
+                                  <input
+                                    type="checkbox"
+                                    checked={!!isChecked}
+                                    onChange={() => handleToggleFeatureChecklist(item.id)}
+                                    className="w-4 h-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
+                                  />
+                                </label>
+                              );
+                            })}
+                          </div>
+                          <div className="flex flex-wrap gap-2 justify-end">
+                            {selectedProjectFeatureDetail.actions.map((action) => (
+                              <Button
+                                key={action.id}
+                                size="sm"
+                                variant={action.intent ?? "primary"}
+                                onClick={() => handleRunFeatureAction(action.label)}
+                              >
+                                <div className="flex flex-col">
+                                  <span>{action.label}</span>
+                                  {action.helper && (
+                                    <span className="text-[10px] font-normal opacity-80">
+                                      {action.helper}
+                                    </span>
+                                  )}
+                                </div>
+                              </Button>
+                            ))}
+                          </div>
+                        </div>
+                        <div className="rounded-2xl border border-gray-100 bg-white/90 p-4 space-y-3 text-right">
+                          <p className="text-xs text-gray-500">
+                            خلاصه پیوست‌های امن و رخدادهای اخیر
+                          </p>
+                          <div className="space-y-2 text-[11px]">
+                            {selectedProjectFeatureDetail.events.map((event) => (
+                              <div
+                                key={event.id}
+                                className="rounded-2xl border border-dashed border-gray-200 px-3 py-2 flex flex-row-reverse items-center justify-between"
+                              >
+                                <div className="text-right">
+                                  <p className="text-xs font-semibold text-gray-900">
+                                    {event.title}
+                                  </p>
+                                  <p className="text-[10px] text-gray-500">
+                                    {event.detail}
+                                  </p>
+                                </div>
+                                <span className="text-[10px] text-gray-400">
+                                  {event.time}
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="flex flex-row-reverse flex-wrap gap-2 text-[11px]">
+                      <span
+                        className={`px-3 py-1 rounded-full border ${
+                          selectedProjectApprovals.stampRequested
+                            ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+                            : "border-gray-200 bg-white text-gray-600"
+                        }`}
+                      >
+                        مهر آسیاصنعت کلاس
+                      </span>
+                      <span
+                        className={`px-3 py-1 rounded-full border ${
+                          selectedProjectApprovals.signatureRequested
+                            ? "border-blue-200 bg-blue-50 text-blue-700"
+                            : "border-gray-200 bg-white text-gray-600"
+                        }`}
+                      >
+                        امضای الکترونیکی
+                      </span>
+                    </div>
+
+                    <div className="flex flex-row-reverse gap-2 flex-wrap">
+                      <Button
+                        variant="primary"
+                        size="sm"
+                        onClick={() => handleProjectAction(selectedProject.id, "stamp")}
+                      >
+                        ثبت مهر دیجیتال آسیاکلاس
+                      </Button>
+                      <Button
+                        variant="secondary"
+                        size="sm"
+                        onClick={() => handleProjectAction(selectedProject.id, "signature")}
+                      >
+                        افزودن امضای فنی
+                      </Button>
+                    </div>
+                    {projectActionNotice?.projectId === selectedProject.id && (
+                      <p className="text-[11px] text-emerald-600">
+                        {projectActionNotice.message}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </GlassCard>
+
+              <Card className="p-5 space-y-4 bg-white/95 border border-gray-100">
+                <div className="flex flex-row-reverse items-start justify-between gap-3">
+                  <div className="text-right">
+                    <h4 className="text-base font-semibold text-gray-900">
+                      پروژه‌های فعال تکنسین
+                    </h4>
+                    <p className="text-xs text-gray-500 mt-1">
+                      هر پروژه شامل نمای کلی، مدارک، بازرسی‌ها، گواهینامه‌ها، مهرها و CAPA است.
+                    </p>
+                  </div>
+                  <span className="text-[11px] text-gray-400">مهر + امضای دیجیتال</span>
+                </div>
+
+                <div className="space-y-3">
+                  {projectWorkspaceProjects.map((project) => {
+                    const approvals =
+                      projectApprovals[project.id] ?? {
+                        stampRequested: false,
+                        signatureRequested: false,
+                      };
+                    const isActive = selectedProject.id === project.id;
+                    const activeFeatureId = activeFeatureByProject[project.id];
+                    const activeFeatureDetail =
+                      (activeFeatureId
+                        ? projectFeatureDetails[project.id]?.[activeFeatureId]
+                        : undefined) ?? null;
+                    const activeChecklist = activeFeatureDetail?.checklist ?? [];
+                    const checklistState = activeFeatureId
+                      ? featureChecklistState[project.id]?.[activeFeatureId]
+                      : undefined;
+                    const activeChecklistDone = activeChecklist.reduce(
+                      (count, item) =>
+                        count + (checklistState?.[item.id] ? 1 : 0),
+                      0
+                    );
+                    const activeChecklistPercent = activeChecklist.length
+                      ? Math.round((activeChecklistDone / activeChecklist.length) * 100)
+                      : null;
+                    return (
+                      <button
+                        key={project.id}
+                        type="button"
+                        onClick={() => handleSelectProject(project.id)}
+                        className={`w-full text-right rounded-2xl border px-4 py-3 transition focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                          isActive
+                            ? "border-blue-400 bg-blue-50/60 shadow-sm"
+                            : "border-gray-100 bg-white hover:border-blue-200"
+                        }`}
+                      >
+                        <div className="flex flex-row-reverse items-start justify-between gap-3">
+                          <div>
+                            <p className="text-sm font-semibold text-gray-900">
+                              {project.title}
+                            </p>
+                            <p className="text-[11px] text-gray-500">
+                              {project.location}
+                            </p>
+                          </div>
+                          <span className="text-[11px] font-mono px-2 py-0.5 rounded-full bg-gray-900 text-white">
+                            {project.utn}
+                          </span>
+                        </div>
+                        <div className="grid grid-cols-3 gap-2 mt-3 text-[11px]">
+                          {project.features.map((feature) => (
+                            <div
+                              key={`${project.id}-${feature.id}`}
+                              className={`rounded-xl border px-2 py-1 flex flex-col items-end ${
+                                feature.id === activeFeatureId
+                                  ? "border-blue-300 bg-blue-50"
+                                  : "border-dashed border-gray-200 bg-gray-50/80"
+                              }`}
+                            >
+                              <span className="text-gray-500">{feature.label}</span>
+                              <span className="text-sm font-semibold text-gray-900">
+                                {typeof feature.count === "number" ? feature.count : "زنده"}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                        {activeFeatureDetail && activeChecklist.length > 0 && (
+                          <div className="mt-3 space-y-1 text-[11px] text-gray-500">
+                            <div className="flex flex-row-reverse items-center justify-between">
+                              <span>
+                                چک‌لیست {activeFeatureDetail.summary.replace(/\.$/, "")}
+                              </span>
+                              <span className="font-semibold text-gray-900">
+                                {activeChecklistDone}/{activeChecklist.length}
+                                {typeof activeChecklistPercent === "number"
+                                  ? ` · ${activeChecklistPercent}%`
+                                  : ""}
+                              </span>
+                            </div>
+                            <div className="h-1.5 rounded-full bg-gray-100 overflow-hidden">
+                              <div
+                                className={`h-full rounded-full ${
+                                  isActive ? "bg-blue-500" : "bg-emerald-500/70"
+                                }`}
+                                style={{
+                                  width: `${activeChecklistPercent ?? 0}%`,
+                                }}
+                              />
+                            </div>
+                          </div>
+                        )}
+                        <div className="flex flex-row-reverse items-center justify-between text-[11px] text-gray-500 mt-3">
+                          <span>{project.due}</span>
+                          <span className="flex items-center gap-1">
+                            <span className={approvals.stampRequested ? "text-emerald-600" : "text-gray-500"}>
+                              {approvals.stampRequested ? "مهر فعال" : "در انتظار مهر"}
+                            </span>
+                            <span className="text-gray-300">·</span>
+                            <span className={approvals.signatureRequested ? "text-blue-600" : "text-gray-500"}>
+                              {approvals.signatureRequested ? "امضا شد" : "بدون امضا"}
+                            </span>
+                          </span>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </Card>
+            </section>
+          )}
+        </div>
       ) : (
         <div className="space-y-8" dir="rtl" lang="fa">
         {/* ردیف بالایی */}
@@ -4280,449 +4721,6 @@ function TechnicianDashboardView() {
             </div>
           </Card>
         </section>
-
-        {selectedProject ? (
-          <section className="grid gap-6 xl:grid-cols-[1.1fr,0.9fr]">
-            <GlassCard className="p-6 space-y-5 bg-white/95 border border-gray-100 shadow-sm">
-              <div className="flex flex-row-reverse items-start justify-between gap-4">
-                <div className="text-right space-y-1">
-                  <p className="text-xs text-gray-500">
-                    اتاق پروژه آسیاصنعت کلاس · اتصال مستقیم با پلتفرم AsiaClass
-                  </p>
-                  <h3 className="text-lg font-semibold text-gray-900">
-                    فضای کاری نقشه + مدارک دیجیتال
-                  </h3>
-                  <p className="text-xs text-gray-500">{selectedProject.focus}</p>
-                </div>
-                <a
-                  href="https://asiaclass.org/en/"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center gap-1 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-[11px] text-blue-700"
-                >
-                  AsiaClass.org
-                  <Icon name="arrowUpRight" size={12} />
-                </a>
-              </div>
-
-              <div className="grid gap-4 lg:grid-cols-[1.1fr,0.9fr] items-start">
-                <div className="relative rounded-[28px] border border-gray-200 bg-slate-900 text-white p-5 overflow-hidden">
-                  <div
-                    className="absolute inset-0 opacity-30"
-                    style={{
-                      backgroundImage:
-                        "linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px)",
-                      backgroundSize: "24px 24px",
-                    }}
-                  />
-                  <div className="relative space-y-4">
-                    <div className="flex flex-row-reverse items-center justify-between text-xs text-white/70">
-                      <span className="px-2 py-0.5 rounded-full border border-white/30">
-                        {selectedProject.utn}
-                      </span>
-                      <span>{selectedProject.port}</span>
-                    </div>
-                    <div className="rounded-2xl border border-white/20 bg-white/5 p-4 min-h-[160px] flex flex-col items-center justify-center text-center space-y-2">
-                      <p className="text-sm font-semibold text-white">
-                        {selectedProject.vessel}
-                      </p>
-                      <p className="text-xs text-white/70">{selectedProject.focus}</p>
-                      <div className="flex flex-row-reverse gap-2 text-[10px] text-white/80">
-                        <span className="px-2 py-0.5 rounded-full border border-white/30">
-                          {selectedProject.risk}
-                        </span>
-                        <span className="px-2 py-0.5 rounded-full border border-white/30">
-                          {selectedProject.capa}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2 text-right">
-                      {selectedProject.callouts.map((callout) => (
-                        <div
-                          key={callout.id}
-                          className="rounded-2xl border border-white/15 bg-white/5 px-3 py-2"
-                        >
-                          <p className="text-[10px] text-white/60">{callout.label}</p>
-                          <p className="text-sm font-semibold">{callout.detail}</p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="space-y-4 text-right">
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="rounded-2xl border border-gray-100 bg-white px-3 py-2">
-                      <p className="text-[11px] text-gray-500">مسئول پرونده</p>
-                      <p className="text-sm font-semibold text-gray-900">
-                        {selectedProject.owner}
-                      </p>
-                    </div>
-                    <div className="rounded-2xl border border-gray-100 bg-white px-3 py-2">
-                      <p className="text-[11px] text-gray-500">موعد</p>
-                      <p className="text-sm font-semibold text-gray-900">
-                        {selectedProject.due}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div>
-                    <div className="flex flex-row-reverse items-center justify-between text-[11px] text-gray-500">
-                      <span>پیشرفت پرونده</span>
-                      <span className="font-semibold text-gray-900">
-                        {selectedProject.progress}٪
-                      </span>
-                    </div>
-                    <div className="mt-1 h-1.5 rounded-full bg-gray-100 overflow-hidden">
-                      <div
-                        className="h-full rounded-full bg-blue-500"
-                        style={{ width: `${selectedProject.progress}%` }}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid gap-2 sm:grid-cols-3">
-                    {selectedProject.features.map((feature) => {
-                      const isActive = feature.id === selectedProjectFeatureId;
-                      return (
-                        <button
-                          type="button"
-                          key={`${selectedProject.id}-${feature.id}`}
-                          onClick={() => handleSelectProjectFeature(feature.id)}
-                          className={`text-right rounded-2xl border px-3 py-2 transition focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                            isActive
-                              ? "border-blue-400 bg-blue-50"
-                              : "border-dashed border-gray-200 bg-gray-50"
-                          }`}
-                          aria-pressed={isActive}
-                        >
-                          <div className="flex flex-row-reverse items-center justify-between text-[11px] text-gray-600">
-                            <span className={isActive ? "text-blue-700" : "text-gray-600"}>
-                              {feature.label}
-                            </span>
-                            {typeof feature.count === "number" && (
-                              <span
-                                className={`font-mono text-sm ${
-                                  isActive ? "text-blue-700" : "text-gray-900"
-                                }`}
-                              >
-                                {feature.count}
-                              </span>
-                            )}
-                          </div>
-                          <p
-                            className={`text-[10px] mt-1 ${
-                              isActive ? "text-blue-500" : "text-gray-400"
-                            }`}
-                          >
-                            {feature.helper}
-                          </p>
-                        </button>
-                      );
-                    })}
-                  </div>
-
-                  {selectedProjectFeatureDetail && (
-                    <div className="grid gap-3 lg:grid-cols-[1.2fr,0.8fr]">
-                      <div className="rounded-2xl border border-gray-100 bg-white/90 p-4 text-right space-y-3">
-                        <p className="text-sm text-gray-700">
-                          {selectedProjectFeatureDetail.summary}
-                        </p>
-                        {selectedFeatureChecklistMeta.total > 0 && (
-                          <div className="space-y-1">
-                            <div className="flex flex-row-reverse items-center justify-between text-[11px] text-gray-500">
-                              <span>پیشرفت چک‌لیست</span>
-                              <span className="font-semibold text-gray-900">
-                                {selectedFeatureChecklistMeta.completed}/
-                                {selectedFeatureChecklistMeta.total} ·
-                                {selectedFeatureChecklistMeta.percent}%
-                              </span>
-                            </div>
-                            <div className="h-1.5 rounded-full bg-gray-100 overflow-hidden">
-                              <div
-                                className="h-full rounded-full bg-emerald-500 transition-all"
-                                style={{
-                                  width: `${selectedFeatureChecklistMeta.percent}%`,
-                                }}
-                              />
-                            </div>
-                          </div>
-                        )}
-                        <div className="grid gap-2 sm:grid-cols-3">
-                          {selectedProjectFeatureDetail.highlights.map(
-                            (highlight) => {
-                              const toneClass =
-                                highlight.tone === "warning"
-                                  ? "border-amber-200 bg-amber-50 text-amber-700"
-                                  : highlight.tone === "positive"
-                                  ? "border-emerald-200 bg-emerald-50 text-emerald-700"
-                                  : "border-gray-200 bg-gray-50 text-gray-700";
-                              return (
-                                <div
-                                  key={highlight.id}
-                                  className={`rounded-xl border px-3 py-2 text-right ${toneClass}`}
-                                >
-                                  <p className="text-[11px] font-medium">
-                                    {highlight.label}
-                                  </p>
-                                  <p className="text-base font-semibold">
-                                    {highlight.value}
-                                  </p>
-                                  {highlight.helper && (
-                                    <p className="text-[10px] opacity-80">
-                                      {highlight.helper}
-                                    </p>
-                                  )}
-                                </div>
-                              );
-                            }
-                          )}
-                        </div>
-                      </div>
-                      <div className="rounded-2xl border border-gray-100 bg-white/90 p-4 text-right space-y-3">
-                        <div className="flex items-center justify-between flex-row-reverse">
-                          <h5 className="text-sm font-semibold text-gray-900">
-                            چک‌لیست اقدام فوری
-                          </h5>
-                          <span className="text-[11px] text-gray-400">
-                            قابل تیک‌زدن توسط تکنسین
-                          </span>
-                        </div>
-                        <div className="space-y-2">
-                          {selectedProjectFeatureDetail.checklist.map(
-                            (item) => {
-                              const isChecked =
-                                selectedFeatureChecklistState[item.id];
-                              return (
-                                <label
-                                  key={item.id}
-                                  className={`flex items-center justify-between flex-row-reverse rounded-2xl border px-3 py-2 text-sm cursor-pointer ${
-                                    isChecked
-                                      ? "border-emerald-300 bg-emerald-50"
-                                      : "border-gray-100 bg-white"
-                                  }`}
-                                >
-                                  <div className="flex flex-col items-end">
-                                    <span
-                                      className={`font-medium ${
-                                        isChecked
-                                          ? "text-emerald-700"
-                                          : "text-gray-700"
-                                      }`}
-                                    >
-                                      {item.label}
-                                    </span>
-                                    {item.note && (
-                                      <span className="text-[11px] text-gray-400">
-                                        {item.note}
-                                      </span>
-                                    )}
-                                  </div>
-                                  <input
-                                    type="checkbox"
-                                    checked={!!isChecked}
-                                    onChange={() => handleToggleFeatureChecklist(item.id)}
-                                    className="w-4 h-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
-                                  />
-                                </label>
-                              );
-                            }
-                          )}
-                        </div>
-                        <div className="flex flex-wrap gap-2 justify-end">
-                          {selectedProjectFeatureDetail.actions.map((action) => (
-                            <Button
-                              key={action.id}
-                              size="sm"
-                              variant={action.intent ?? "primary"}
-                              onClick={() => handleRunFeatureAction(action.label)}
-                            >
-                              <div className="flex flex-col">
-                                <span>{action.label}</span>
-                                {action.helper && (
-                                  <span className="text-[10px] font-normal opacity-80">
-                                    {action.helper}
-                                  </span>
-                                )}
-                              </div>
-                            </Button>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  <div className="flex flex-row-reverse flex-wrap gap-2 text-[11px]">
-                    <span
-                      className={`px-3 py-1 rounded-full border ${
-                        selectedProjectApprovals.stampRequested
-                          ? "border-emerald-200 bg-emerald-50 text-emerald-700"
-                          : "border-gray-200 bg-white text-gray-600"
-                      }`}
-                    >
-                      مهر آسیاصنعت کلاس
-                    </span>
-                    <span
-                      className={`px-3 py-1 rounded-full border ${
-                        selectedProjectApprovals.signatureRequested
-                          ? "border-blue-200 bg-blue-50 text-blue-700"
-                          : "border-gray-200 bg-white text-gray-600"
-                      }`}
-                    >
-                      امضای الکترونیکی
-                    </span>
-                  </div>
-
-                  <div className="flex flex-row-reverse gap-2 flex-wrap">
-                    <Button
-                      variant="primary"
-                      size="sm"
-                      onClick={() => handleProjectAction(selectedProject.id, "stamp")}
-                    >
-                      ثبت مهر دیجیتال آسیاکلاس
-                    </Button>
-                    <Button
-                      variant="secondary"
-                      size="sm"
-                      onClick={() => handleProjectAction(selectedProject.id, "signature")}
-                    >
-                      افزودن امضای فنی
-                    </Button>
-                  </div>
-                  {projectActionNotice?.projectId === selectedProject.id && (
-                    <p className="text-[11px] text-emerald-600">
-                      {projectActionNotice.message}
-                    </p>
-                  )}
-                </div>
-              </div>
-            </GlassCard>
-
-            <Card className="p-5 space-y-4 bg-white/95 border border-gray-100">
-              <div className="flex flex-row-reverse items-start justify-between gap-3">
-                <div className="text-right">
-                  <h4 className="text-base font-semibold text-gray-900">
-                    پروژه‌های فعال تکنسین
-                  </h4>
-                  <p className="text-xs text-gray-500 mt-1">
-                    هر پروژه شامل نمای کلی، مدارک، بازرسی‌ها، گواهینامه‌ها، مهرها و CAPA است.
-                  </p>
-                </div>
-                <span className="text-[11px] text-gray-400">مهر + امضای دیجیتال</span>
-              </div>
-
-              <div className="space-y-3">
-                {projectWorkspaceProjects.map((project) => {
-                  const approvals =
-                    projectApprovals[project.id] ?? {
-                      stampRequested: false,
-                      signatureRequested: false,
-                    };
-                  const isActive = selectedProject.id === project.id;
-                  const activeFeatureId = activeFeatureByProject[project.id];
-                  const activeFeatureDetail =
-                    (activeFeatureId
-                      ? projectFeatureDetails[project.id]?.[activeFeatureId]
-                      : undefined) ?? null;
-                  const activeChecklist = activeFeatureDetail?.checklist ?? [];
-                  const checklistState = activeFeatureId
-                    ? featureChecklistState[project.id]?.[activeFeatureId]
-                    : undefined;
-                  const activeChecklistDone = activeChecklist.reduce(
-                    (count, item) =>
-                      count + (checklistState?.[item.id] ? 1 : 0),
-                    0
-                  );
-                  const activeChecklistPercent = activeChecklist.length
-                    ? Math.round((activeChecklistDone / activeChecklist.length) * 100)
-                    : null;
-                  return (
-                    <button
-                      key={project.id}
-                      type="button"
-                      onClick={() => handleSelectProject(project.id)}
-                      className={`w-full text-right rounded-2xl border px-4 py-3 transition focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                        isActive
-                          ? "border-blue-400 bg-blue-50/60 shadow-sm"
-                          : "border-gray-100 bg-white hover:border-blue-200"
-                      }`}
-                    >
-                      <div className="flex flex-row-reverse items-start justify-between gap-3">
-                        <div>
-                          <p className="text-sm font-semibold text-gray-900">
-                            {project.title}
-                          </p>
-                          <p className="text-[11px] text-gray-500">
-                            {project.location}
-                          </p>
-                        </div>
-                        <span className="text-[11px] font-mono px-2 py-0.5 rounded-full bg-gray-900 text-white">
-                          {project.utn}
-                        </span>
-                      </div>
-                      <div className="grid grid-cols-3 gap-2 mt-3 text-[11px]">
-                        {project.features.map((feature) => (
-                          <div
-                            key={`${project.id}-${feature.id}`}
-                            className={`rounded-xl border px-2 py-1 flex flex-col items-end ${
-                              feature.id === activeFeatureId
-                                ? "border-blue-300 bg-blue-50"
-                                : "border-dashed border-gray-200 bg-gray-50/80"
-                            }`}
-                          >
-                            <span className="text-gray-500">{feature.label}</span>
-                            <span className="text-sm font-semibold text-gray-900">
-                              {typeof feature.count === "number"
-                                ? feature.count
-                                : "زنده"}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                      {activeFeatureDetail && activeChecklist.length > 0 && (
-                        <div className="mt-3 space-y-1 text-[11px] text-gray-500">
-                          <div className="flex flex-row-reverse items-center justify-between">
-                            <span>
-                              چک‌لیست {activeFeatureDetail.summary.replace(/\.$/, "")}
-                            </span>
-                            <span className="font-semibold text-gray-900">
-                              {activeChecklistDone}/{activeChecklist.length}
-                              {typeof activeChecklistPercent === "number"
-                                ? ` · ${activeChecklistPercent}%`
-                                : ""}
-                            </span>
-                          </div>
-                          <div className="h-1.5 rounded-full bg-gray-100 overflow-hidden">
-                            <div
-                              className={`h-full rounded-full ${
-                                isActive ? "bg-blue-500" : "bg-emerald-500/70"
-                              }`}
-                              style={{
-                                width: `${activeChecklistPercent ?? 0}%`,
-                              }}
-                            />
-                          </div>
-                        </div>
-                      )}
-                      <div className="flex flex-row-reverse items-center justify-between text-[11px] text-gray-500 mt-3">
-                        <span>{project.due}</span>
-                        <span className="flex items-center gap-1">
-                          <span className={approvals.stampRequested ? "text-emerald-600" : "text-gray-500"}>
-                            {approvals.stampRequested ? "مهر فعال" : "در انتظار مهر"}
-                          </span>
-                          <span className="text-gray-300">·</span>
-                          <span className={approvals.signatureRequested ? "text-blue-600" : "text-gray-500"}>
-                            {approvals.signatureRequested ? "امضا شد" : "بدون امضا"}
-                          </span>
-                        </span>
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-            </Card>
-          </section>
-        ) : null}
 
         {/* منابع و پشتیبانی */}
         <section className="grid gap-6 lg:grid-cols-3">

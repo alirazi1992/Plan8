@@ -16,6 +16,11 @@ export const workspaceTabs: WorkspaceTab[] = [{
   label: 'میز گزارش‌گیری',
   description: 'تحلیل کیفیت اجرا و آماده‌سازی خروجی‌ها',
   accent: 'from-orange-50 to-rose-50'
+}, {
+  id: 'workbench',
+  label: 'میز کار',
+  description: 'پروژه‌های فعال + مهر و امضای دیجیتال',
+  accent: 'from-purple-50 to-blue-50'
 }];
 
 export const workspaceSnapshots: Record<WorkspaceTabId, WorkspaceSnapshot> = {
@@ -146,6 +151,47 @@ export const workspaceSnapshots: Record<WorkspaceTabId, WorkspaceSnapshot> = {
       owner: 'فاطمه کریمی',
       due: 'دوشنبه آینده'
     }]
+  },
+  workbench: {
+    headline: 'میز کار دیجیتال',
+    subline: '۳ پروژه حساس منتظر مهر و امضا هستند',
+    priority: 'چک‌لیست‌ها را تکمیل و مهر AsiaClass را برای پرونده‌های فعال ثبت کنید.',
+    metrics: [{
+      id: 'workbench-projects',
+      label: 'پروژه‌های فعال',
+      value: '۳',
+      trend: {
+        isPositive: true,
+        value: '+۱'
+      }
+    }, {
+      id: 'workbench-stamps',
+      label: 'مهرهای صادرشده',
+      value: '۵',
+      trend: {
+        isPositive: true,
+        value: '+۲'
+      }
+    }, {
+      id: 'workbench-checklists',
+      label: 'چک‌لیست تکمیل‌شده',
+      value: '۸۶%',
+      trend: {
+        isPositive: true,
+        value: '+۶%'
+      }
+    }],
+    reminders: [{
+      id: 'workbench-1',
+      title: 'تایید مدارک UTN-2045',
+      owner: 'سارا رحیمی',
+      due: 'امروز ۱۵:۳۰'
+    }, {
+      id: 'workbench-2',
+      title: 'ثبت امضای دیجیتال UTN-2101',
+      owner: 'محمد رضوی',
+      due: 'فردا ۰۹:۰۰'
+    }]
   }
 };
 
@@ -219,6 +265,7 @@ export function createInitialJourneyState(): JourneyState {
   return {
     cases: cloneIslands(journeyBase),
     calendar: cloneIslands(journeyBase),
-    reports: cloneIslands(journeyBase)
+    reports: cloneIslands(journeyBase),
+    workbench: cloneIslands(journeyBase)
   };
 }

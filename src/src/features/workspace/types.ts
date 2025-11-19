@@ -1,6 +1,6 @@
 import { Island } from '../projects/types';
 
-export type WorkspaceTabId = 'cases' | 'calendar' | 'reports';
+export type WorkspaceTabId = 'cases' | 'calendar' | 'reports' | 'workbench';
 
 export interface WorkspaceTab {
   id: WorkspaceTabId;
